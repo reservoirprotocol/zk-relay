@@ -36,7 +36,83 @@ const config: HardhatUserConfig = {
     },
   },
   solidity: {
-    version: "0.8.24",
+    compilers: [
+      {
+        version: "0.8.24",
+        settings: {
+          viaIR: true,
+          evmVersion: "cancun",
+          optimizer: {
+            enabled: true,
+          },
+          metadata: {
+            bytecodeHash: "none",
+          },
+        },
+      },
+    ],
+    overrides: {
+      "contracts/seaport-1.5/Seaport.sol": {
+        version: "0.8.17",
+        settings: {
+          viaIR: true,
+          optimizer: {
+            enabled: true,
+            runs: 4_294_967_295
+          },
+        },
+      },
+      "contracts/seaport-1.5/helpers/": {
+        version: "0.8.17",
+        settings: {
+          viaIR: true,
+          optimizer: {
+            enabled: true,
+            runs: 4_294_967_295
+          },
+        },
+      },
+      "contracts/seaport-1.5/lib/": {
+        version: "0.8.17",
+        settings: {
+          viaIR: true,
+          optimizer: {
+            enabled: true,
+            runs: 4_294_967_295
+          },
+        },
+      },
+      "contracts/seaport-1.5/conduit/Conduit.sol": {
+        version: "0.8.14",
+        settings: {
+          viaIR: true,
+          optimizer: {
+            enabled: true,
+            runs: 1000000,
+          },
+        },
+      },
+      "contracts/seaport-1.5/conduit/ConduitController.sol": {
+        version: "0.8.14",
+        settings: {
+          viaIR: true,
+          optimizer: {
+            enabled: true,
+            runs: 1000000,
+          },
+        },
+      },
+      "contracts/helper/TransferHelper.sol": {
+        version: "0.8.14",
+        settings: {
+          viaIR: true,
+          optimizer: {
+            enabled: true,
+            runs: 1000000,
+          },
+        },
+      },
+    },
   },
 };
 
