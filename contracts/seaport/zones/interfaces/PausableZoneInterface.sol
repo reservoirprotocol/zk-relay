@@ -1,9 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.13;
 
-import {
-    SeaportInterface
-} from "seaport-types/src/interfaces/SeaportInterface.sol";
+import { SeaportInterface } from "../../interfaces/SeaportInterface.sol";
 
 import {
     AdvancedOrder,
@@ -12,7 +10,7 @@ import {
     Fulfillment,
     Order,
     OrderComponents
-} from "seaport-types/src/lib/ConsiderationStructs.sol";
+} from "../../lib/ConsiderationStructs.sol";
 
 /**
  * @title  PausableZone
@@ -88,9 +86,10 @@ interface PausableZoneInterface {
     /**
      * @notice Pause this contract, safely stopping orders from using
      *         the contract as a zone. Restricted orders with this address as a
-     *         zone will not be fulfillable unless the zone is unpaused.
+     *         zone will not be fulfillable unless the zone is redeployed to the
+     *         same address.
      */
-    function pause() external;
+    function pause(address payee) external;
 
     /**
      * @notice Assign the given address with the ability to operate the zone.

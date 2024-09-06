@@ -8,11 +8,9 @@ import {
     Fulfillment,
     Order,
     OrderComponents
-} from "seaport-types/src/lib/ConsiderationStructs.sol";
+} from "../../lib/ConsiderationStructs.sol";
 
-import {
-    SeaportInterface
-} from "seaport-types/src/interfaces/SeaportInterface.sol";
+import { SeaportInterface } from "../../interfaces/SeaportInterface.sol";
 
 /**
  * @title  PausableZoneController

@@ -18,11 +18,9 @@ import {
     Fulfillment,
     Order,
     OrderComponents
-} from "seaport-types/src/lib/ConsiderationStructs.sol";
+} from "../lib/ConsiderationStructs.sol";
 
-import {
-    SeaportInterface
-} from "seaport-types/src/interfaces/SeaportInterface.sol";
+import { SeaportInterface } from "../interfaces/SeaportInterface.sol";
 
 /**
  * @title  PausableZoneController
@@ -103,7 +101,7 @@ contract PausableZoneController is
             )
         );
 
-        // Revert if a zone is already deployed to the derived address.
+        // Revert if a zone is currently deployed to the derived address.
         if (derivedAddress.code.length != 0) {
             revert ZoneAlreadyExists(derivedAddress);
         }
@@ -126,7 +124,7 @@ contract PausableZoneController is
         address zone
     ) external override isPauser returns (bool success) {
         // Call pause on the given zone.
-        PausableZone(zone).pause();
+        PausableZone(zone).pause(msg.sender);
 
         // Return a boolean indicating the pause was successful.
         success = true;

@@ -108,9 +108,4 @@ interface PausableZoneEventsAndErrors {
      *      the potentialOwner role.
      */
     error CallerIsNotPotentialOwner();
-
-    /**
-     * @dev Revert with an error when the zone is paused
-     */
-    error ZoneIsPaused();
 }
