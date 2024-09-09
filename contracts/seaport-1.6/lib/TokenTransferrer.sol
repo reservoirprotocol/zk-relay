@@ -85,7 +85,7 @@ import {
 
 import {
     ConduitBatch1155Transfer
-} from "seaport-types/src/conduit/lib/ConduitStructs.sol";
+} from "../conduit/lib/ConduitStructs.sol";
 
 /**
  * @title TokenTransferrer
