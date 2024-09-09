@@ -3,11 +3,11 @@ pragma solidity ^0.8.14;
 
 import {
     ConduitControllerInterface
-} from "seaport-types/src/interfaces/ConduitControllerInterface.sol";
+} from "../interfaces/ConduitControllerInterface.sol";
 
 import {
     ConduitInterface
-} from "seaport-types/src/interfaces/ConduitInterface.sol";
+} from "../interfaces/ConduitInterface.sol";
 
 import { Conduit } from "./Conduit.sol";
 
