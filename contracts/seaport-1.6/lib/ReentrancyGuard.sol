@@ -44,10 +44,10 @@ import {
  */
 contract ReentrancyGuard is ReentrancyErrors, LowLevelHelpers {
     // Declare an immutable variable to store the initial TSTORE support status.
-    bool private immutable _tstoreInitialSupport;
+    bool private immutable _tstoreInitialSupport = false;
 
     // Declare an immutable variable to store the tstore test contract address.
-    address private immutable _tloadTestContract;
+    // address private immutable _tloadTestContract;
 
     /**
      * @dev Initialize the reentrancy guard during deployment. This involves
@@ -57,26 +57,26 @@ contract ReentrancyGuard is ReentrancyErrors, LowLevelHelpers {
      *      result.
      */
     constructor() {
-        // Deploy the contract testing TLOAD support and store the address.
-        address tloadTestContract = _prepareTloadTest();
+        // // Deploy the contract testing TLOAD support and store the address.
+        // address tloadTestContract = _prepareTloadTest();
 
-        // Ensure the deployment was successful.
-        if (tloadTestContract == address(0)) {
-            revert TloadTestContractDeploymentFailed();
-        }
+        // // Ensure the deployment was successful.
+        // if (tloadTestContract == address(0)) {
+        //     revert TloadTestContractDeploymentFailed();
+        // }
 
         // Determine if TSTORE is supported.
-        bool tstoreInitialSupport = _testTload(tloadTestContract);
+        // bool tstoreInitialSupport = _testTload(tloadTestContract);
 
         // Store the result as an immutable.
-        _tstoreInitialSupport = tstoreInitialSupport;
+        // _tstoreInitialSupport = tstoreInitialSupport;
 
         // Set the address of the deployed TLOAD test contract as an immutable.
-        _tloadTestContract = tloadTestContract;
+        // _tloadTestContract = tloadTestContract;
 
         // If not using TSTORE (where _NOT_ENTERED_TSTORE = 0), set initial
         // sentinel value (where _NOT_ENTERED_SSTORE = 1).
-        if (!tstoreInitialSupport) {
+        if (!_tstoreInitialSupport) {
             // Initialize storage for the reentrancy guard in a cleared state.
             assembly {
                 sstore(_REENTRANCY_GUARD_SLOT, _NOT_ENTERED_SSTORE)
@@ -109,7 +109,7 @@ contract ReentrancyGuard is ReentrancyErrors, LowLevelHelpers {
         }
 
         // Determine if TSTORE can be activated and revert if not.
-        if (!_testTload(_tloadTestContract)) {
+        if (!_tstoreInitialSupport) {
             revert TStoreNotSupported();
         }
 
