@@ -8,6 +8,11 @@
   "scripts": {
     "deploy": "hardhat deploy-zksync --script deploy.ts",
     "deployUniversalRouter": "hardhat deploy-zksync --script deployUniversalRouter.ts",
+    "deployPermit2": "hardhat deploy-zksync --script deployPermit2.ts",
+    "deploySeaport1.5": "hardhat deploy-zksync --script deploySeaport1.5.ts",
+    "deploySeaport1.6": "hardhat deploy-zksync --script deploySeaport1.6.ts",
+    "deployWeth": "hardhat deploy-zksync --script deployWeth.ts",
+    "deployUniV2": "hardhat deploy-zksync --script deployUniV2.ts",
     "interact": "hardhat deploy-zksync --script interact.ts",
     "compile": "hardhat compile",
     "clean": "hardhat clean",
