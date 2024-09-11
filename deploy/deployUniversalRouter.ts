@@ -2,7 +2,6 @@ import * as ethers from 'ethers'
 import { Deployer } from '@matterlabs/hardhat-zksync-deploy'
 import * as fs from 'fs'
 import { deployContract, getWallet } from './utils'
-import deploy from './deploy';
 
 export default async function () {
   const unsupportedContract = await deployUnsupported();
