@@ -112,6 +112,66 @@ const config: HardhatUserConfig = {
           },
         },
       },
+      "contracts/uni-v2/UniswapV2ERC20.sol": {
+        version: "0.5.16",
+        settings: {
+          viaIR: true,
+          optimizer: {
+            enabled: true,
+            runs: 1000000,
+          },
+        },
+      },
+      "contracts/uni-v2/UniswapV2Factory.sol": {
+        version: "0.5.16",
+        settings: {
+          viaIR: true,
+          optimizer: {
+            enabled: true,
+            runs: 1000000,
+          },
+        },
+      },
+      "contracts/uni-v2/UniswapV2Pair.sol": {
+        version: "0.5.16",
+        settings: {
+          viaIR: true,
+          optimizer: {
+            enabled: true,
+            runs: 1000000,
+          },
+        },
+      },
+      "contracts/uni-v2/libraries/UQ112x112.sol": {
+        version: "0.5.16",
+        settings: {
+          viaIR: true,
+          optimizer: {
+            enabled: true,
+            runs: 1000000,
+          },
+        },
+      },
+      "contracts/uni-v2/libraries/Math.sol": {
+        version: "0.5.16",
+        settings: {
+          viaIR: true,
+          optimizer: {
+            enabled: true,
+            runs: 1000000,
+          },
+        },
+      },
+      "contracts/uni-v2/libraries/SafeMath.sol": {
+        version: "0.5.16",
+        settings: {
+          viaIR: true,
+          optimizer: {
+            enabled: true,
+            runs: 1000000,
+          },
+        },
+      },
     },
   },
 };
