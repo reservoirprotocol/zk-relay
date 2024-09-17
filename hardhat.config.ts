@@ -58,6 +58,13 @@ const config: HardhatUserConfig = {
       },
     ],
     overrides: {
+      "contracts/relay/ERC20Router.sol": {
+        version: "0.8.25",
+        settings: {
+          viaIR: true,
+          evmVersion: "cancun"
+        },
+      },
       "contracts/seaport-1.5/Seaport.sol": {
         version: "0.8.17",
         settings: {
@@ -177,6 +184,15 @@ const config: HardhatUserConfig = {
             runs: 1000000,
           },
         },
+      },
+      "contracts/SignatureChecker.sol": {
+        version: "0.6.12"
+      },
+      "contracts/ECRecover.sol": {
+        version: "0.6.12"
+      },
+      "contracts/IERC1271.sol": {
+        version: "0.6.12"
       },
     },
   },
