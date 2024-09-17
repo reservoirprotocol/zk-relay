@@ -25,3 +25,9 @@
 [submodule "lib/tstorish"]
 	path = lib/tstorish
 	url = https://github.com/ProjectOpenSea/tstorish
+[submodule "lib/stablecoin-evm"]
+	path = lib/stablecoin-evm
+	url = https://github.com/circlefin/stablecoin-evm
+[submodule "lib/@openzeppelin-contracts-v3.1.0"]
+	path = lib/@openzeppelin-contracts-v3.1.0
+	url = https://github.com/OpenZeppelin/openzeppelin-contracts

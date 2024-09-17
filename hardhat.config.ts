@@ -37,8 +37,11 @@ const config: HardhatUserConfig = {
     version: "latest",
     settings: {
       enableEraVMExtensions: true,
-      // find all available options in the official documentation
-      // https://era.zksync.io/docs/tools/hardhat/hardhat-zksync-solc.html#configuration
+      libraries: {
+        "contracts/usdc/util/SignatureChecker.sol": {
+          "SignatureChecker": "0xbBB5d95A805b48E24f369127ECcDDF81e87f1A0F"
+        }
+      }
     },
   },
   solidity: {
@@ -56,6 +59,7 @@ const config: HardhatUserConfig = {
           },
         },
       },
+      { version: "0.6.12" }
     ],
     overrides: {
       "contracts/relay/ERC20Router.sol": {
@@ -116,6 +120,26 @@ const config: HardhatUserConfig = {
         },
       },
       "contracts/helper/TransferHelper.sol": {
+        version: "0.8.14",
+        settings: {
+          viaIR: true,
+          optimizer: {
+            enabled: true,
+            runs: 1000000,
+          },
+        },
+      },
+      "contracts/seaport-1.6/conduit/ConduitController.sol": {
+        version: "0.8.14",
+        settings: {
+          viaIR: true,
+          optimizer: {
+            enabled: true,
+            runs: 1000000,
+          },
+        },
+      },
+      "contracts/seaport-1.6/interfaces/IContractDeployer.sol": {
         version: "0.8.14",
         settings: {
           viaIR: true,
@@ -192,6 +216,9 @@ const config: HardhatUserConfig = {
         version: "0.6.12"
       },
       "contracts/IERC1271.sol": {
+        version: "0.6.12"
+      },
+      "contracts/usdc/*": {
         version: "0.6.12"
       },
     },

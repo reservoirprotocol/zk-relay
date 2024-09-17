@@ -9,3 +9,4 @@ solmate/=lib/solmate
 @matterlabs/zksync-contracts/=/lib/v2-testnet-contracts/
 seaport-core/=lib/seaport-core
 seaport-sol/=lib/seaport-sol
+@openzeppelin-contracts-v3.1.0/=lib/@openzeppelin-contracts-v3.1.0/contracts
