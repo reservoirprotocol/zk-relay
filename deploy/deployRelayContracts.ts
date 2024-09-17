@@ -4,12 +4,13 @@ import { DeploymentType } from "zksync-ethers/build/types";
 const salt = "0x0000000000000000000000000000000000000000000000000000000000000000";
 
 const PERMIT2 = "0x7d174F25ADcd4157EcB5B3448fEC909AeCB70033"
+const MULTICALLER = "0x1903f6E993BbaA21aEf311a3ABF7fF627542d167"
 const SOLVER = "0xf70da97812CB96acDF810712Aa562db8dfA3dbEF"
+const ERC20ROUTER = "0xad822d7f6Ba100f1a74834E5D3C24B95F1434CbB"
 
 export default async function () {
-  const multicallerAddress = await deployMulticaller();
-  const routerAddress = await deployErc20Router(PERMIT2, multicallerAddress);
-  await deployApprovalProxy(routerAddress);
+  // const routerAddress = await deployErc20Router();
+  await deployApprovalProxy();
   await deployRelayReceiver();
 }
 
@@ -30,11 +31,11 @@ const deployMulticaller = async () => {
   return multicallerAddress;
 }
 
-const deployApprovalProxy = async (erc20Router: string) => {
+const deployApprovalProxy = async () => {
   const approvalProxy = await deployContract(
     "ApprovalProxy",
     "create2" as DeploymentType,
-    [], // constructorArguments (empty array if there are no constructor arguments)
+    [SOLVER, ERC20ROUTER], // constructorArguments (empty array if there are no constructor arguments)
     {}, // options (empty object if no options are needed)
     {
       customData: {
@@ -47,17 +48,20 @@ const deployApprovalProxy = async (erc20Router: string) => {
   return approvalProxyAddress;
 }
 
-const deployErc20Router = async (permit2: string, multicaller: string) => {
+const deployErc20Router = async () => {
   const erc20Router = await deployContract(
     "ERC20Router",
     "create2" as DeploymentType,
-    [permit2, multicaller], // constructorArguments (empty array if there are no constructor arguments)
+    [PERMIT2, MULTICALLER, SOLVER], // constructorArguments (empty array if there are no constructor arguments)
     {}, // options (empty object if no options are needed)
     {
       customData: {
       salt: salt
     }}
-  );
+  ).catch((error) => {
+    console.error(JSON.stringify(error.info._error.error));
+    process.exit(1);
+  });
 
   const erc20RouterAddress = await erc20Router.getAddress();
 
