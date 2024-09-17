@@ -9,8 +9,11 @@ import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol
 import {IAllowanceTransfer} from "permit2-relay/src/interfaces/IAllowanceTransfer.sol";
 import {ISignatureTransfer} from "permit2-relay/src/interfaces/ISignatureTransfer.sol";
 import {IPermit2} from "permit2-relay/src/interfaces/IPermit2.sol";
-import {RelayerWitness} from "./types/lib/RelayStructs.sol";
-import {IMulticaller} from "./types/interfaces/IMulticaller.sol";
+import {IMulticaller} from "./interfaces/IMulticaller.sol";
+
+struct RelayerWitness {
+    address relayer;
+}
 
 contract ERC20Router is Ownable {
     using SafeERC20 for IERC20;
@@ -23,19 +26,8 @@ contract ERC20Router is Ownable {
     /// @notice Revert if this contract is set as the recipient
     error InvalidRecipient(address recipient);
 
-    /// @notice Revert if the target is invalid
-    error InvalidTarget(address target);
-
     /// @notice Revert if the native transfer failed
     error NativeTransferFailed();
-
-    /// @notice Revert if no recipient is set
-    error NoRecipientSet();
-
-    uint256 RECIPIENT_STORAGE_SLOT = uint256(keccak256("ERC20Router.recipient"));
-
-    address constant ZORA_REWARDS_V1 =
-        0x7777777F279eba3d3Ad8F4E708545291A6fDBA8B;
 
     IPermit2 private immutable PERMIT2;
     address private immutable MULTICALLER;
@@ -45,7 +37,7 @@ contract ERC20Router is Ownable {
     bytes32 public constant _EIP_712_RELAYER_WITNESS_TYPE_HASH =
         keccak256("RelayerWitness(address relayer)");
 
-    constructor(address permit2, address multicaller, address owner) Tstorish() {
+    constructor(address permit2, address multicaller, address owner) {
         // Set the address of the Permit2 contract
         PERMIT2 = IPermit2(permit2);
 
@@ -123,9 +115,6 @@ contract ERC20Router is Ownable {
             revert ArrayLengthsMismatch();
         }
 
-        // Set the recipient in storage
-        _setRecipient(refundTo);
-
         // Perform the multicall
         bytes memory data = _delegatecallMulticall(
             targets,
@@ -133,9 +122,6 @@ contract ERC20Router is Ownable {
             values,
             refundTo
         );
-
-        // Clear the recipient in storage
-        _clearRecipient();
 
         return data;
     }
@@ -195,43 +181,6 @@ contract ERC20Router is Ownable {
         );
     }
 
-    /// @notice Internal function to set the recipient address for ERC721 or ERC1155 mint
-    /// @dev If the chain does not support tstore, recipient will be saved in storage
-    /// @param recipient The address of the recipient
-    function _setRecipient(address recipient) internal {
-        // Return early if the recipient is address(0) or address(1), which are special cases for the multicaller
-        // If a multicall is expecting to mint ERC721s or ERC1155s, the recipient must be explicitly set
-        if (recipient == address(0) || recipient == address(1)) {
-            return;
-        }
-
-        // For safety, revert if the recipient is this contract
-        // Tokens should either be minted directly to recipient, or transferred to recipient through the onReceived hooks
-        if (recipient == address(this)) {
-            revert InvalidRecipient(address(this));
-        }
-
-        // Set the recipient in storage
-        _setTstorish(RECIPIENT_STORAGE_SLOT, uint256(uint160(recipient)));
-    }
-
-    /// @notice Internal function to get the recipient address for ERC721 or ERC1155 mint
-    function _getRecipient() internal view returns (address) {
-        // Get the recipient from storage
-        return address(uint160(_getTstorish(RECIPIENT_STORAGE_SLOT)));
-    }
-
-    /// @notice Internal function to clear the recipient address for ERC721 or ERC1155 mint
-    function _clearRecipient() internal {
-        // Return if recipient hasn't been set
-        if (_getRecipient() == address(0)) {
-            return;
-        }
-
-        // Clear the recipient in storage
-        _clearTstorish(RECIPIENT_STORAGE_SLOT);
-    }
-
     /// @notice Internal function to delegatecall the Multicaller contract
     /// @param targets The addresses of the contracts to call
     /// @param datas The calldata for each call
@@ -243,13 +192,6 @@ contract ERC20Router is Ownable {
         uint256[] calldata values,
         address refundTo
     ) internal returns (bytes memory) {
-        for (uint256 i = 0; i < targets.length; i++) {
-            // Revert if the call fails
-            if (targets[i] == ZORA_REWARDS_V1) {
-                revert InvalidTarget(ZORA_REWARDS_V1);
-            }
-        }
-
         // Perform the multicall and refund to the user
         (bool success, bytes memory data) = MULTICALLER.delegatecall(
             abi.encodeWithSignature(
@@ -284,73 +226,5 @@ contract ERC20Router is Ownable {
         if (!success) {
             revert NativeTransferFailed();
         }
-    }
-
-    function onERC721Received(
-        address /*_operator*/,
-        address /*_from*/,
-        uint256 _tokenId,
-        bytes calldata _data
-    ) external returns (bytes4) {
-        // Get the recipient from storage
-        address recipient = _getRecipient();
-
-        // Revert if no recipient is set
-        // Note this means transferring NFTs to this contract via `safeTransferFrom` will revert,
-        // unless the transfer is part of a multicall that sets the recipient in storage
-        if (recipient == address(0)) {
-            revert NoRecipientSet();
-        }
-
-        // Transfer the NFT to the recipient
-        IERC721(msg.sender).safeTransferFrom(address(this), recipient, _tokenId, _data);
-
-        return this.onERC721Received.selector;
-    }
-
-    function onERC1155Received(
-        address /*_operator*/,
-        address /*_from*/,
-        uint256 _id,
-        uint256 _value,
-        bytes calldata _data
-    ) external returns (bytes4) {
-        // Get the recipient from storage
-        address recipient = _getRecipient();
-
-        // Revert if no recipient is set
-        // Note this means transferring NFTs to this contract via `safeTransferFrom` will revert,
-        // unless the transfer is part of a multicall that sets the recipient in storage
-        if (recipient == address(0)) {
-            revert NoRecipientSet();
-        }
-
-        // Transfer the tokens to the recipient
-        IERC1155(msg.sender).safeTransferFrom(address(this), recipient, _id, _value, _data);
-
-        return this.onERC1155Received.selector;
-    }
-
-    function onERC1155BatchReceived(
-        address /*_operator*/,
-        address /*_from*/,
-        uint256[] calldata _ids,
-        uint256[] calldata _values,
-        bytes calldata _data
-    ) external returns (bytes4) {
-        // Get the recipient from storage
-        address recipient = _getRecipient();
-
-        // Revert if no recipient is set
-        // Note this means transferring NFTs to this contract via `safeTransferFrom` will revert,
-        // unless the transfer is part of a multicall that sets the recipient in storage
-        if (recipient == address(0)) {
-            revert NoRecipientSet();
-        }
-
-        // Transfer the tokens to the recipient
-        IERC1155(msg.sender).safeBatchTransferFrom(address(this), recipient, _ids, _values, _data);
-
-        return this.onERC1155BatchReceived.selector;
     }
 }
