@@ -19,3 +19,9 @@
 [submodule "lib/solady"]
 	path = lib/solady
 	url = https://github.com/Vectorized/solady
+[submodule "lib/permit2-relay"]
+	path = lib/permit2-relay
+	url = https://github.com/reservoirprotocol/permit2-relay
+[submodule "lib/tstorish"]
+	path = lib/tstorish
+	url = https://github.com/ProjectOpenSea/tstorish

@@ -13,6 +13,12 @@ const config: HardhatUserConfig = {
       verifyURL:
         "https://api-explorer-verify.testnet.abs.xyz/contract_verification",
     },
+    zkSyncMainnet: {
+      url: 'https://mainnet.era.zksync.io',
+      ethNetwork: `https://convincing-prettiest-frost.zksync-mainnet.quiknode.pro/a14018fec401cbe6626d8a200375555d21a5503e/`,
+      zksync: true,
+      verifyURL: 'https://zksync2-mainnet-explorer.zksync.io/contract_verification',
+    },
     dockerizedNode: {
       url: "http://localhost:3050",
       ethNetwork: "http://localhost:8545",
@@ -52,6 +58,13 @@ const config: HardhatUserConfig = {
       },
     ],
     overrides: {
+      "contracts/relay/ERC20Router.sol": {
+        version: "0.8.25",
+        settings: {
+          viaIR: true,
+          evmVersion: "cancun"
+        },
+      },
       "contracts/seaport-1.5/Seaport.sol": {
         version: "0.8.17",
         settings: {
@@ -171,6 +184,15 @@ const config: HardhatUserConfig = {
             runs: 1000000,
           },
         },
+      },
+      "contracts/SignatureChecker.sol": {
+        version: "0.6.12"
+      },
+      "contracts/ECRecover.sol": {
+        version: "0.6.12"
+      },
+      "contracts/IERC1271.sol": {
+        version: "0.6.12"
       },
     },
   },
