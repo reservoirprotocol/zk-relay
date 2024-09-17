@@ -19,7 +19,7 @@
 pragma solidity 0.6.12;
 
 import { ECRecover } from "./ECRecover.sol";
-import { IERC1271 } from "./IERC1271.sol";
+import { IERC1271 } from "../interface/IERC1271.sol";
 
 /**
  * @dev Signature verification helper that can be used instead of `ECRecover.recover` to seamlessly support both ECDSA
