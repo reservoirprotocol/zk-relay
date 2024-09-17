@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity 0.8.20;
+pragma solidity ^0.8.14;
 
 interface IContractDeployer {
     /// @notice Defines the version of the account abstraction protocol
@@ -36,9 +36,15 @@ interface IContractDeployer {
         address indexed contractAddress
     );
 
-    event AccountNonceOrderingUpdated(address indexed accountAddress, AccountNonceOrdering nonceOrdering);
+    event AccountNonceOrderingUpdated(
+        address indexed accountAddress,
+        AccountNonceOrdering nonceOrdering
+    );
 
-    event AccountVersionUpdated(address indexed accountAddress, AccountAbstractionVersion aaVersion);
+    event AccountVersionUpdated(
+        address indexed accountAddress,
+        AccountAbstractionVersion aaVersion
+    );
 
     function getNewAddressCreate2(
         address _sender,
@@ -47,7 +53,10 @@ interface IContractDeployer {
         bytes calldata _input
     ) external view returns (address newAddress);
 
-    function getNewAddressCreate(address _sender, uint256 _senderNonce) external pure returns (address newAddress);
+    function getNewAddressCreate(
+        address _sender,
+        uint256 _senderNonce
+    ) external pure returns (address newAddress);
 
     function create2(
         bytes32 _salt,
@@ -81,7 +90,9 @@ interface IContractDeployer {
     ) external payable returns (address newAddress);
 
     /// @notice Returns the information about a certain AA.
-    function getAccountInfo(address _address) external view returns (AccountInfo memory info);
+    function getAccountInfo(
+        address _address
+    ) external view returns (AccountInfo memory info);
 
     /// @notice Can be called by an account to update its account version
     function updateAccountVersion(AccountAbstractionVersion _version) external;

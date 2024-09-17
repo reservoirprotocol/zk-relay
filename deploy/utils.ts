@@ -141,7 +141,8 @@ export const deployContract = async (
   deploymentType: DeploymentType,
   constructorArguments?: any[],
   options?: DeployContractOptions,
-  overrides?: ethers.Overrides
+  overrides?: ethers.Overrides,
+  additionalFactoryDeps?: ethers.BytesLike[]
 ) => {
   const log = (message: string) => {
     if (!options?.silent) console.log(message);
@@ -181,7 +182,8 @@ export const deployContract = async (
     artifact,
     constructorArguments,
     deploymentType,
-    overrides
+    overrides,
+    additionalFactoryDeps
   );
   const address = await contract.getAddress();
   const constructorArgs = contract.interface.encodeDeploy(constructorArguments);
