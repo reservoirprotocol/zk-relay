@@ -1,15 +1,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.14;
 
-import {
-    ConduitControllerInterface
-} from "../interfaces/ConduitControllerInterface.sol";
+import {ConduitControllerInterface} from "../interfaces/ConduitControllerInterface.sol";
 
-import {
-    ConduitInterface
-} from "../interfaces/ConduitInterface.sol";
+import {ConduitInterface} from "../interfaces/ConduitInterface.sol";
 
-import { Conduit } from "./Conduit.sol";
+import {Conduit} from "./Conduit.sol";
+
+import {IContractDeployer} from "../interfaces/IContractDeployer.sol";
 
 /**
  * @title ConduitController
@@ -26,6 +24,10 @@ contract ConduitController is ConduitControllerInterface {
     bytes32 internal immutable _CONDUIT_CREATION_CODE_HASH;
     bytes32 internal immutable _CONDUIT_RUNTIME_CODE_HASH;
 
+    // Set the contract deployer as an immutable for deriving conduit address.
+    IContractDeployer immutable contractDeployer =
+        IContractDeployer(0x0000000000000000000000000000000000008006);
+
     /**
      * @dev Initialize contract by deploying a conduit and setting the creation
      *      code and runtime code hashes as immutable arguments.
@@ -35,7 +37,7 @@ contract ConduitController is ConduitControllerInterface {
         _CONDUIT_CREATION_CODE_HASH = keccak256(type(Conduit).creationCode);
 
         // Deploy a conduit with the zero hash as the salt.
-        Conduit zeroConduit = new Conduit{ salt: bytes32(0) }();
+        Conduit zeroConduit = new Conduit{salt: bytes32(0)}();
 
         // Retrieve the conduit runtime code hash and set it as an immutable.
         _CONDUIT_RUNTIME_CODE_HASH = address(zeroConduit).codehash;
@@ -71,19 +73,11 @@ contract ConduitController is ConduitControllerInterface {
         }
 
         // Derive address from deployer, conduit key and creation code hash.
-        conduit = address(
-            uint160(
-                uint256(
-                    keccak256(
-                        abi.encodePacked(
-                            bytes1(0xff),
-                            address(this),
-                            conduitKey,
-                            _CONDUIT_CREATION_CODE_HASH
-                        )
-                    )
-                )
-            )
+        conduit = contractDeployer.getNewAddressCreate2(
+            address(this),
+            _CONDUIT_CREATION_CODE_HASH,
+            conduitKey,
+            ""
         );
 
         // If derived conduit exists, as evidenced by comparing runtime code...
@@ -93,7 +87,7 @@ contract ConduitController is ConduitControllerInterface {
         }
 
         // Deploy the conduit via CREATE2 using the conduit key as the salt.
-        new Conduit{ salt: conduitKey }();
+        new Conduit{salt: conduitKey}();
 
         // Initialize storage variable referencing conduit properties.
         ConduitProperties storage conduitProperties = _conduits[conduit];
