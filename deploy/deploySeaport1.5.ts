@@ -6,6 +6,7 @@ import { DeploymentType } from "zksync-ethers/build/types";
 import { ZkSyncArtifact } from "@matterlabs/hardhat-zksync-deploy/src/types";
 
 const salt = "0x0000000000000000000000000000000000000000000000000000000000000001";
+const CONDUIT_CONTROLLER_ADDRESS = "0xbCF4f1C0489729a9569aFB09f705BEaC531AADF4"
 
 export default async function () {
   await deploySeaportV1_5();
