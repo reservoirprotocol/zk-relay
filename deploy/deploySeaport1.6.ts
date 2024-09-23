@@ -2,6 +2,7 @@ import { deployContract } from "./utils";
 import { DeploymentType } from "zksync-ethers/build/types";
 
 const salt = "0x0000000000000000000000000000000000000000000000000000000000000001";
+const CONDUIT_CONTROLLER_ADDRESS = "0xd2529C5F1978Efcdb14350E9dAD433852FD94A35"
 
 export default async function () {
   await deploySeaportV1_6();
@@ -39,7 +40,7 @@ const deploySeaportV1_6 = async () => {
       }
     }
   ).catch((error) => {
-    console.error(JSON.stringify(error.info._error.error));
+    console.error(JSON.stringify(error));
     process.exit(1);
   });
 
