@@ -19,6 +19,12 @@ const config: HardhatUserConfig = {
       zksync: true,
       verifyURL: 'https://zksync2-mainnet-explorer.zksync.io/contract_verification',
     },
+    zeroTestnet: {
+      url: 'https://rpc.zerion.io/v1/zero-sepolia',
+      zksync: true,
+      ethNetwork: 'sepolia',
+      verifyURL: 'https://api-explorer.zero.network/contract/contract_verification'
+    },
     dockerizedNode: {
       url: "http://localhost:3050",
       ethNetwork: "http://localhost:8545",
