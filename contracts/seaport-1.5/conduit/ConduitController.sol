@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.13;
+pragma solidity ^0.8.14;
 
-import {
-    ConduitControllerInterface
-} from "../interfaces/ConduitControllerInterface.sol";
+import {ConduitControllerInterface} from "../interfaces/ConduitControllerInterface.sol";
 
-import { ConduitInterface } from "../interfaces/ConduitInterface.sol";
+import {ConduitInterface} from "../interfaces/ConduitInterface.sol";
 
-import { Conduit } from "./Conduit.sol";
+import {Conduit} from "./Conduit.sol";
+
+import {IContractDeployer} from "../../seaport-1.6/interfaces/IContractDeployer.sol";
 
 /**
  * @title ConduitController
@@ -24,6 +24,10 @@ contract ConduitController is ConduitControllerInterface {
     bytes32 internal immutable _CONDUIT_CREATION_CODE_HASH;
     bytes32 internal immutable _CONDUIT_RUNTIME_CODE_HASH;
 
+    // Set the contract deployer as an immutable for deriving conduit address.
+    IContractDeployer immutable contractDeployer =
+        IContractDeployer(0x0000000000000000000000000000000000008006);
+
     /**
      * @dev Initialize contract by deploying a conduit and setting the creation
      *      code and runtime code hashes as immutable arguments.
@@ -33,10 +37,10 @@ contract ConduitController is ConduitControllerInterface {
         _CONDUIT_CREATION_CODE_HASH = keccak256(type(Conduit).creationCode);
 
         // Deploy a conduit with the zero hash as the salt.
-        // Conduit zeroConduit = new Conduit{ salt: bytes32(0) }();
+        Conduit zeroConduit = new Conduit{salt: bytes32(0)}();
 
         // Retrieve the conduit runtime code hash and set it as an immutable.
-        _CONDUIT_RUNTIME_CODE_HASH = 0x069efdc9b946a332dce9951324fa197268e3ff0e00e44c6bf36049fc53113a41;
+        _CONDUIT_RUNTIME_CODE_HASH = address(zeroConduit).codehash;
     }
 
     /**
@@ -51,12 +55,12 @@ contract ConduitController is ConduitControllerInterface {
      *                     the caller of this contract.
      * @param initialOwner The initial owner to set for the new conduit.
      *
-     * @return conduit The address of the newly deployed conduit.
+     * @return conduitAddress The address of the newly deployed conduit.
      */
     function createConduit(
         bytes32 conduitKey,
         address initialOwner
-    ) external override returns (address conduit) {
+    ) external override returns (address conduitAddress) {
         // Ensure that an initial owner has been supplied.
         if (initialOwner == address(0)) {
             revert InvalidInitialOwner();
@@ -69,32 +73,27 @@ contract ConduitController is ConduitControllerInterface {
         }
 
         // Derive address from deployer, conduit key and creation code hash.
-        conduit = address(
-            uint160(
-                uint256(
-                    keccak256(
-                        abi.encodePacked(
-                            bytes1(0xff),
-                            address(this),
-                            conduitKey,
-                            _CONDUIT_CREATION_CODE_HASH
-                        )
-                    )
-                )
-            )
+        address predictedConduitAddress = contractDeployer.getNewAddressCreate2(
+            address(this),
+            _CONDUIT_CREATION_CODE_HASH,
+            conduitKey,
+            ""
         );
 
         // If derived conduit exists, as evidenced by comparing runtime code...
-        if (conduit.codehash == _CONDUIT_RUNTIME_CODE_HASH) {
+        if (predictedConduitAddress.codehash == _CONDUIT_RUNTIME_CODE_HASH) {
             // Revert with an error indicating that the conduit already exists.
-            revert ConduitAlreadyExists(conduit);
+            revert ConduitAlreadyExists(predictedConduitAddress);
         }
 
         // Deploy the conduit via CREATE2 using the conduit key as the salt.
-        new Conduit{ salt: conduitKey }();
+        Conduit conduit = new Conduit{salt: conduitKey}();
+
+        // Get the address of the deployed conduit
+        conduitAddress = address(conduit);
 
         // Initialize storage variable referencing conduit properties.
-        ConduitProperties storage conduitProperties = _conduits[conduit];
+        ConduitProperties storage conduitProperties = _conduits[conduitAddress];
 
         // Set the supplied initial owner as the owner of the conduit.
         conduitProperties.owner = initialOwner;
@@ -103,10 +102,10 @@ contract ConduitController is ConduitControllerInterface {
         conduitProperties.key = conduitKey;
 
         // Emit an event indicating that the conduit has been deployed.
-        emit NewConduit(conduit, conduitKey);
+        emit NewConduit(conduitAddress, conduitKey);
 
         // Emit an event indicating that conduit ownership has been assigned.
-        emit OwnershipTransferred(conduit, address(0), initialOwner);
+        emit OwnershipTransferred(conduitAddress, address(0), initialOwner);
     }
 
     /**
@@ -332,19 +331,11 @@ contract ConduitController is ConduitControllerInterface {
         bytes32 conduitKey
     ) external view override returns (address conduit, bool exists) {
         // Derive address from deployer, conduit key and creation code hash.
-        conduit = address(
-            uint160(
-                uint256(
-                    keccak256(
-                        abi.encodePacked(
-                            bytes1(0xff),
-                            address(this),
-                            conduitKey,
-                            _CONDUIT_CREATION_CODE_HASH
-                        )
-                    )
-                )
-            )
+        conduit = contractDeployer.getNewAddressCreate2(
+            address(this),
+            _CONDUIT_CREATION_CODE_HASH,
+            conduitKey,
+            ""
         );
 
         // Determine whether conduit exists by retrieving its runtime code.
