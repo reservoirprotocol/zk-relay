@@ -9,30 +9,33 @@ export default async function () {
 }
 
 const deploySeaportV1_6 = async () => {
-  const conduitController = await deployContract(
-    "contracts/seaport-1.6/conduit/ConduitController.sol:ConduitController",
-    "create2" as DeploymentType,
-    [], // constructorArguments (empty array if there are no constructor arguments)
-    {}, // options (empty object if no options are needed)
-    {
-      customData: {
-        salt: salt
-      }
-    }
-  ).catch((error) => {
-    console.error(JSON.stringify(error.info._error.error));
-    process.exit(1);
-  });
+  // Uncomment this block if you want to deploy ConduitController
+  // Else update CONDUIT_CONTROLLER_ADDRESS with the deployed ConduitController address
 
-  const conduitControllerAddress = await conduitController.getAddress();
-  console.log(
-    `ConduitController deployed to address ${conduitControllerAddress}`
-  );
+  // const conduitController = await deployContract(
+  //   "contracts/seaport-1.6/conduit/ConduitController.sol:ConduitController",
+  //   "create2" as DeploymentType,
+  //   [], // constructorArguments (empty array if there are no constructor arguments)
+  //   {}, // options (empty object if no options are needed)
+  //   {
+  //     customData: {
+  //       salt: salt
+  //     }
+  //   }
+  // ).catch((error) => {
+  //   console.error(JSON.stringify(error.info._error.error));
+  //   process.exit(1);
+  // });
+
+  // const conduitControllerAddress = await conduitController.getAddress();
+  // console.log(
+  //   `ConduitController deployed to address ${conduitControllerAddress}`
+  // );
 
   const seaport = await deployContract(
     "contracts/seaport-1.6/Seaport.sol:Seaport",
     "create2" as DeploymentType,
-    [conduitControllerAddress], // constructorArguments (empty array if there are no constructor arguments)
+    [CONDUIT_CONTROLLER_ADDRESS], // constructorArguments (empty array if there are no constructor arguments)
     {}, // options (empty object if no options are needed)
     {
       customData: {
