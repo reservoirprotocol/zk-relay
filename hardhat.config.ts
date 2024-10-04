@@ -20,10 +20,10 @@ const config: HardhatUserConfig = {
       verifyURL: 'https://zksync2-mainnet-explorer.zksync.io/contract_verification',
     },
     zeroTestnet: {
-      url: 'https://rpc.zerion.io/v1/zero-sepolia',
+      url: 'https://zerion-testnet-proofs.rpc.caldera.xyz/http',
       zksync: true,
       ethNetwork: 'sepolia',
-      verifyURL: 'https://api-explorer.zero.network/contract/contract_verification'
+      verifyURL: 'https://zerion-testnet-proofs.explorer.caldera.xyz/contract_verification'
     },
     dockerizedNode: {
       url: "http://localhost:3050",
@@ -40,7 +40,7 @@ const config: HardhatUserConfig = {
     },
   },
   zksolc: {
-    version: "latest",
+    version: "1.5.3",
     settings: {
       enableEraVMExtensions: true,
       libraries: {
