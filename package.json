@@ -51,6 +51,7 @@
     "@rari-capital/solmate": "^6.4.0",
     "@uniswap/v2-core": "^1.0.1",
     "@uniswap/v3-core": "^1.0.1",
+    "era-uniswap-v3-core": "uniswap-zksync/era-uniswap-v3-core",
     "seaport-core": "^1.6.6",
     "seaport-sol": "^1.6.0",
     "solmate": "^6.2.0"

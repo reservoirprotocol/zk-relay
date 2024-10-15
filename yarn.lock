@@ -2166,6 +2166,10 @@ env-paths@^2.2.0:
   resolved "https://registry.yarnpkg.com/env-paths/-/env-paths-2.2.1.tgz#420399d416ce1fbe9bc0a07c62fa68d67fd0f8f2"
   integrity sha512-+h1lkLKhZMTYjog1VEpJNG7NZJWcuc2DDk/qsqSTRRCOXiLjeQ1d1/udrUGhqMxUgAlwKNZ0cf2uqan5GLuS2A==
 
+era-uniswap-v3-core@uniswap-zksync/era-uniswap-v3-core:
+  version "1.0.0"
+  resolved "https://codeload.github.com/uniswap-zksync/era-uniswap-v3-core/tar.gz/099d3ff2b0a0e0049df89c2f3c26b9e5e7630d87"
+
 es-define-property@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/es-define-property/-/es-define-property-1.0.0.tgz#c7faefbdff8b2696cf5f46921edfb77cc4ba3845"
