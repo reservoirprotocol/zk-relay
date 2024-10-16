@@ -135,16 +135,6 @@ const config: HardhatUserConfig = {
           },
         },
       },
-      "contracts/seaport-1.6/conduit/ConduitController.sol": {
-        version: "0.8.14",
-        settings: {
-          viaIR: true,
-          optimizer: {
-            enabled: true,
-            runs: 1000000,
-          },
-        },
-      },
       "contracts/seaport-1.6/interfaces/IContractDeployer.sol": {
         version: "0.8.14",
         settings: {

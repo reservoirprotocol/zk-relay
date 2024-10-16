@@ -1,37 +1,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.17;
 
-import { OrderParameters } from "./ConsiderationStructs.sol";
+import {OrderParameters} from "./ConsiderationStructs.sol";
 
-import { ConsiderationBase } from "./ConsiderationBase.sol";
+import {ConsiderationBase} from "./ConsiderationBase.sol";
 
-import {
-    Create2AddressDerivation_length,
-    Create2AddressDerivation_ptr,
-    EIP_712_PREFIX,
-    EIP712_ConsiderationItem_size,
-    EIP712_DigestPayload_size,
-    EIP712_DomainSeparator_offset,
-    EIP712_OfferItem_size,
-    EIP712_Order_size,
-    EIP712_OrderHash_offset,
-    FreeMemoryPointerSlot,
-    information_conduitController_offset,
-    information_domainSeparator_offset,
-    information_length,
-    information_version_cd_offset,
-    information_version_offset,
-    information_versionLengthPtr,
-    information_versionWithLength,
-    MaskOverByteTwelve,
-    MaskOverLastTwentyBytes,
-    OneWord,
-    OneWordShift,
-    OrderParameters_consideration_head_offset,
-    OrderParameters_counter_offset,
-    OrderParameters_offer_head_offset,
-    TwoWords
-} from "./ConsiderationConstants.sol";
+import {Create2AddressDerivation_length, Create2AddressDerivation_ptr, EIP_712_PREFIX, EIP712_ConsiderationItem_size, EIP712_DigestPayload_size, EIP712_DomainSeparator_offset, EIP712_OfferItem_size, EIP712_Order_size, EIP712_OrderHash_offset, FreeMemoryPointerSlot, information_conduitController_offset, information_domainSeparator_offset, information_length, information_version_cd_offset, information_version_offset, information_versionLengthPtr, information_versionWithLength, MaskOverByteTwelve, MaskOverLastTwentyBytes, OneWord, OneWordShift, OrderParameters_consideration_head_offset, OrderParameters_counter_offset, OrderParameters_offer_head_offset, TwoWords} from "./ConsiderationConstants.sol";
+
+import {IContractDeployer} from "../interfaces/IContractDeployer.sol";
 
 /**
  * @title GettersAndDerivers
@@ -40,6 +16,10 @@ import {
  *         related to getting or deriving various values.
  */
 contract GettersAndDerivers is ConsiderationBase {
+    // Set the contract deployer as an immutable for deriving conduit address.
+    IContractDeployer immutable contractDeployer =
+        IContractDeployer(0x0000000000000000000000000000000000008006);
+
     /**
      * @dev Derive and set hashes, reference chainId, and associated domain
      *      separator during deployment.
@@ -102,7 +82,9 @@ contract GettersAndDerivers is ConsiderationBase {
             offerArrPtr := add(offerArrPtr, OneWord)
 
             // Iterate over the offer items.
-            for { let i := 0 } lt(i, offerLength) {
+            for {
+                let i := 0
+            } lt(i, offerLength) {
                 i := add(i, 1)
             } {
                 // Read the pointer to the offer data and subtract one word
@@ -156,7 +138,9 @@ contract GettersAndDerivers is ConsiderationBase {
             )
 
             // Iterate over the consideration items (not including tips).
-            for { let i := 0 } lt(i, originalConsiderationLength) {
+            for {
+                let i := 0
+            } lt(i, originalConsiderationLength) {
                 i := add(i, 1)
             } {
                 // Read the pointer to the consideration data and subtract one
@@ -269,43 +253,13 @@ contract GettersAndDerivers is ConsiderationBase {
     function _deriveConduit(
         bytes32 conduitKey
     ) internal view returns (address conduit) {
-        // Read conduit controller address from runtime and place on the stack.
-        address conduitController = address(_CONDUIT_CONTROLLER);
-
-        // Read conduit creation code hash from runtime and place on the stack.
-        bytes32 conduitCreationCodeHash = _CONDUIT_CREATION_CODE_HASH;
-
-        // Leverage scratch space to perform an efficient hash.
-        assembly {
-            // Retrieve the free memory pointer; it will be replaced afterwards.
-            let freeMemoryPointer := mload(FreeMemoryPointerSlot)
-
-            // Place the control character and the conduit controller in scratch
-            // space; note that eleven bytes at the beginning are left unused.
-            mstore(0, or(MaskOverByteTwelve, conduitController))
-
-            // Place the conduit key in the next region of scratch space.
-            mstore(OneWord, conduitKey)
-
-            // Place conduit creation code hash in free memory pointer location.
-            mstore(TwoWords, conduitCreationCodeHash)
-
-            // Derive conduit by hashing and applying a mask over last 20 bytes.
-            conduit := and(
-                // Hash the relevant region.
-                keccak256(
-                    // The region starts at memory pointer 11.
-                    Create2AddressDerivation_ptr,
-                    // The region is 85 bytes long (1 + 20 + 32 + 32).
-                    Create2AddressDerivation_length
-                ),
-                // The address equals the last twenty bytes of the hash.
-                MaskOverLastTwentyBytes
-            )
-
-            // Restore the free memory pointer.
-            mstore(FreeMemoryPointerSlot, freeMemoryPointer)
-        }
+        // Derive address from deployer, conduit key and runtime code hash.
+        conduit = contractDeployer.getNewAddressCreate2(
+            address(this),
+            0x01000173c84b585f036dfe80bfefe59f60cfb3b185f58bc0069e83f98d2fa90a,
+            conduitKey,
+            ""
+        );
     }
 
     /**
@@ -317,9 +271,10 @@ contract GettersAndDerivers is ConsiderationBase {
      * @return The domain separator.
      */
     function _domainSeparator() internal view returns (bytes32) {
-        return block.chainid == _CHAIN_ID
-            ? _DOMAIN_SEPARATOR
-            : _deriveDomainSeparator();
+        return
+            block.chainid == _CHAIN_ID
+                ? _DOMAIN_SEPARATOR
+                : _deriveDomainSeparator();
     }
 
     /**
