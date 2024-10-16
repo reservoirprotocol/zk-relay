@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.14;
+pragma solidity ^0.8.24;
 
 import {ConduitControllerInterface} from "../interfaces/ConduitControllerInterface.sol";
 
@@ -37,10 +37,10 @@ contract ConduitController is ConduitControllerInterface {
         _CONDUIT_CREATION_CODE_HASH = keccak256(type(Conduit).creationCode);
 
         // Deploy a conduit with the zero hash as the salt.
-        Conduit zeroConduit = new Conduit{salt: bytes32(0)}();
+        // Conduit zeroConduit = new Conduit{salt: bytes32(0)}();
 
         // Retrieve the conduit runtime code hash and set it as an immutable.
-        _CONDUIT_RUNTIME_CODE_HASH = address(zeroConduit).codehash;
+        _CONDUIT_RUNTIME_CODE_HASH = 0x01000173c84b585f036dfe80bfefe59f60cfb3b185f58bc0069e83f98d2fa90a;
     }
 
     /**
@@ -72,10 +72,10 @@ contract ConduitController is ConduitControllerInterface {
             revert InvalidCreator();
         }
 
-        // Derive address from deployer, conduit key and creation code hash.
+        // Derive address from deployer, conduit key and runtime code hash.
         address predictedConduitAddress = contractDeployer.getNewAddressCreate2(
             address(this),
-            _CONDUIT_CREATION_CODE_HASH,
+            _CONDUIT_RUNTIME_CODE_HASH,
             conduitKey,
             ""
         );
@@ -330,10 +330,10 @@ contract ConduitController is ConduitControllerInterface {
     function getConduit(
         bytes32 conduitKey
     ) external view override returns (address conduit, bool exists) {
-        // Derive address from deployer, conduit key and creation code hash.
+        // Derive address from deployer, conduit key and runtime code hash.
         conduit = contractDeployer.getNewAddressCreate2(
             address(this),
-            _CONDUIT_CREATION_CODE_HASH,
+            _CONDUIT_RUNTIME_CODE_HASH,
             conduitKey,
             ""
         );
