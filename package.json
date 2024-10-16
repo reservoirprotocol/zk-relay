@@ -15,6 +15,7 @@
     "deployUniV2": "hardhat deploy-zksync --script deployUniV2.ts",
     "deployRelay": "hardhat deploy-zksync --script deployRelayContracts.ts",
     "deployUsdc": "hardhat deploy-zksync --script deployUsdc.ts",
+    "deployUniV3": "hardhat deploy-zksync --script deployUniV3.ts",
     "interact": "hardhat deploy-zksync --script interact.ts",
     "compile": "hardhat compile",
     "clean": "hardhat clean",
