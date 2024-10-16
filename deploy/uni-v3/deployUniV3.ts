@@ -5,7 +5,7 @@ import { deployUniV2 } from '../deployUniV2';
 export default async function () {
   const weth9Address = "0xEE6B04fcD07A54D78a7a23f353F2B4a0bfb4a78C";
   const v3FactoryOwner = "0x2BAD8182C09F50c8318d769245beA52C32Be46CD";
-  const v2CoreFactory = await deployUniV2();
+  const v2CoreFactory = "0x1B4427e212475B12e62f0f142b8AfEf3BC18B559";
   const proxyOwner = "0x2BAD8182C09F50c8318d769245beA52C32Be46CD";
 
   const v3FactoryAddress = await DEPLOY_V3_CORE_FACTORY();

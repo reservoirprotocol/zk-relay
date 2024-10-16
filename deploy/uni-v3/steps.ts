@@ -1,6 +1,6 @@
 import { deployContract, getWallet } from '../utils';
-import * as ProxyAdmin from "../../artifacts-zk/uniswap-zksync-v3/proxy/ProxyAdmin.sol/ProxyAdmin.json"
-import * as UniswapV3Factory from "../../artifacts-zk/uniswap-zksync-v3/UniswapV3Factory.sol/UniswapV3Factory.json";
+import * as ProxyAdmin from "openzeppelin-solidity/artifacts-zk/contracts/proxy/ProxyAdmin.sol/ProxyAdmin.json"
+import * as UniswapV3Factory from "era-uniswap-v3-core/artifacts-zk/contracts/UniswapV3Factory.sol/UniswapV3Factory.json";
 import { DeploymentType } from "zksync-ethers/build/types";
 import { Contract } from "zksync-ethers";
 
