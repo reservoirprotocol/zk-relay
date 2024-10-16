@@ -53,6 +53,7 @@
     "@uniswap/v2-core": "^1.0.1",
     "@uniswap/v3-core": "^1.0.1",
     "era-uniswap-v3-core": "uniswap-zksync/era-uniswap-v3-core",
+    "openzeppelin-solidity": "https://github.com/uniswap-zksync/era-openzeppelin-contracts#v3.4.1-solc-0.7-2-zksync-era",
     "seaport-core": "^1.6.6",
     "seaport-sol": "^1.6.0",
     "solmate": "^6.2.0"
