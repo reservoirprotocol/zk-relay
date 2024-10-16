@@ -7,15 +7,18 @@ export default async function () {
   await deployWETH9();
 }
 
-const deployWETH9 = async () => {
-  await deployContract(
+export const deployWETH9 = async () => {
+  const contract = await deployContract(
     "WETH9",
     "create2" as DeploymentType,
     [], // constructorArguments (empty array if there are no constructor arguments)
     {}, // options (empty object if no options are needed)
     {
       customData: {
-      salt: salt
-    }}
+        salt: salt
+      }
+    }
   );
+
+  return await contract.getAddress();
 }
