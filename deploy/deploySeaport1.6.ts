@@ -1,8 +1,8 @@
 import { deployContract } from "./utils";
 import { DeploymentType } from "zksync-ethers/build/types";
 
-const salt = "0x0000000000000000000000000000000000000000000000000000000000000001";
-const CONDUIT_CONTROLLER_ADDRESS = "0xd2529C5F1978Efcdb14350E9dAD433852FD94A35"
+const salt = "0x0000000000000000000000000000000000000000000000000000000000000000";
+const CONDUIT_CONTROLLER_ADDRESS = "0xA453E092951863fb829781643Ea692188ee5C7E1"
 
 export default async function () {
   await deploySeaportV1_6();
