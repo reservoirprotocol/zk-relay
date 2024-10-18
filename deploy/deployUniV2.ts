@@ -7,16 +7,22 @@ export default async function () {
   await deployUniV2();
 }
 
-const deployUniV2 = async () => {
-  await deployContract(
+export const deployUniV2 = async () => {
+  const contract = await deployContract(
     "UniswapV2Factory",
     "create2" as DeploymentType,
     ["0xf3d63166F0Ca56C3c1A3508FcE03Ff0Cf3Fb691e"], // constructorArguments (empty array if there are no constructor arguments)
     {}, // options (empty object if no options are needed)
     {
       customData: {
-      salt: salt
-    }}
-  );
+        salt: salt
+      }
+    }
+  ).catch((error) => {
+    console.error(JSON.stringify(error));
+    process.exit(1);
+  });
+
+  return await contract.getAddress();
 }
 
