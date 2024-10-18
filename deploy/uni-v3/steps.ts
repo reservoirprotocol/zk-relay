@@ -1,10 +1,13 @@
-import { deployContract, getWallet } from '../utils';
-import * as ProxyAdmin from "openzeppelin-solidity/artifacts-zk/contracts/proxy/ProxyAdmin.sol/ProxyAdmin.json"
-import * as UniswapV3Factory from "era-uniswap-v3-core/artifacts-zk/contracts/UniswapV3Factory.sol/UniswapV3Factory.json";
+import { deployContract, deployContractArtifact, getWallet } from '../utils';
+import ProxyAdmin from "openzeppelin-solidity/artifacts-zk/contracts/proxy/ProxyAdmin.sol/ProxyAdmin.json"
+import UniswapV3Factory from "era-uniswap-v3-core/artifacts-zk/contracts/UniswapV3Factory.sol/UniswapV3Factory.json";
+import UniswapInterfaceMulticall from 'era-uniswap-v3-periphery/artifacts-zk/contracts/lens/UniswapInterfaceMulticall.sol/UniswapInterfaceMulticall.json'
+import TickLens from 'era-uniswap-v3-periphery/artifacts-zk/contracts/lens/TickLens.sol/TickLens.json'
+
 import { DeploymentType } from "zksync-ethers/build/types";
 import { Contract } from "zksync-ethers";
 
-const salt = "0x0000000000000000000000000000000000000000000000000000000000000000";
+const salt = "0x0000000000000000000000000000000000000000000000000000000000000007";
 
 const ONE_BP_FEE = 100;
 const ONE_BP_TICK_SPACING = 1;
@@ -20,8 +23,8 @@ const MAX_INCENTIVE_DURATION = ONE_YEAR_SECONDS * 2;
 
 
 export const DEPLOY_V3_CORE_FACTORY = async () => {
-  const contract = await deployContract(
-    'UniswapV3Factory',
+  const contract = await deployContractArtifact(
+    UniswapV3Factory as any,
     "create2" as DeploymentType,
     [],
     {},
@@ -59,8 +62,8 @@ export const ADD_1BP_FEE_TIER = async (v3CoreFactoryAddress: string) => {
 }
 
 export const DEPLOY_MULTICALL2 = async () => {
-  const contract = await deployContract(
-    'UniswapInterfaceMulticall',
+  const contract = await deployContractArtifact(
+    UniswapInterfaceMulticall as any,
     "create2" as DeploymentType,
     [],
     {},
@@ -74,8 +77,8 @@ export const DEPLOY_MULTICALL2 = async () => {
 };
 
 export const DEPLOY_PROXY_ADMIN = async () => {
-  const contract = await deployContract(
-    'ProxyAdmin',
+  const contract = await deployContractArtifact(
+    ProxyAdmin as any,
     "create2" as DeploymentType,
     [],
     {},
@@ -90,7 +93,7 @@ export const DEPLOY_PROXY_ADMIN = async () => {
 
 export const DEPLOY_TICK_LENS = async () => {
   const contract = await deployContract(
-    'TickLens',
+    TickLens as any,
     "create2" as DeploymentType,
     [],
     {},
