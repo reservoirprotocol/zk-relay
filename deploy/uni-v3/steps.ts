@@ -3,7 +3,8 @@ import ProxyAdmin from "openzeppelin-solidity/artifacts-zk/contracts/proxy/Proxy
 import UniswapV3Factory from "era-uniswap-v3-core/artifacts-zk/contracts/UniswapV3Factory.sol/UniswapV3Factory.json";
 import UniswapInterfaceMulticall from 'era-uniswap-v3-periphery/artifacts-zk/contracts/lens/UniswapInterfaceMulticall.sol/UniswapInterfaceMulticall.json'
 import TickLens from 'era-uniswap-v3-periphery/artifacts-zk/contracts/lens/TickLens.sol/TickLens.json'
-
+import NFTDescriptor from 'era-uniswap-v3-periphery/artifacts-zk/contracts/libraries/NFTDescriptor.sol/NFTDescriptor.json'
+g
 import { DeploymentType } from "zksync-ethers/build/types";
 import { Contract } from "zksync-ethers";
 
@@ -107,8 +108,8 @@ export const DEPLOY_TICK_LENS = async () => {
 };
 
 export const DEPLOY_NFT_DESCRIPTOR_LIBRARY_V1_3_0 = async () => {
-  const contract = await deployContract(
-    'NFTDescriptor',
+  const contract = await deployContractArtifact(
+    NFTDescriptor as any,
     "create2" as DeploymentType,
     [],
     {},
