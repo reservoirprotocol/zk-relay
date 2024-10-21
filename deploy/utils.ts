@@ -7,7 +7,6 @@ import { vars } from "hardhat/config";
 import "@matterlabs/hardhat-zksync-node/dist/type-extensions";
 import "@matterlabs/hardhat-zksync-verify/dist/src/type-extensions";
 import { DeploymentType } from "zksync-ethers/build/types";
-import { ZkSyncArtifact } from "@matterlabs/hardhat-zksync-deploy/src/types";
 
 const PRIVATE_KEY_HARDHAT_CONFIGURATION_VARIABLE_NAME = "WALLET_PRIVATE_KEY";
 
@@ -167,66 +166,6 @@ export const deployContract = async (
         throw error;
       }
     });
-
-  // Estimate contract deployment fee
-  const deploymentFee = await deployer.estimateDeployFee(
-    artifact,
-    constructorArguments || []
-  );
-  log(`Estimated deployment cost: ${ethers.formatEther(deploymentFee)} ETH`);
-
-  // Check if the wallet has enough balance
-  await verifyEnoughBalance(wallet, deploymentFee);
-
-  // Deploy the contract to zkSync
-  const contract = await deployer.deploy(
-    artifact,
-    constructorArguments,
-    deploymentType,
-    overrides,
-    additionalFactoryDeps
-  );
-  const address = await contract.getAddress();
-  const constructorArgs = contract.interface.encodeDeploy(constructorArguments);
-  const fullContractSource = `${artifact.sourceName}:${artifact.contractName}`;
-
-  // Display contract deployment info
-  log(`\n"${artifact.contractName}" was successfully deployed:`);
-  log(` - Contract address: ${address}`);
-  log(` - Contract source: ${fullContractSource}`);
-  log(` - Encoded constructor arguments: ${constructorArgs}\n`);
-
-  if (!options?.noVerify && hre.network.config.verifyURL) {
-    log(`Requesting contract verification...`);
-    await verifyContract({
-      address,
-      contract: fullContractSource,
-      constructorArguments: constructorArgs,
-      bytecode: artifact.bytecode,
-    });
-  }
-
-  logExplorerUrl(address, "address");
-
-  return contract;
-};
-
-export const deployContractArtifact = async (
-  artifact: ZkSyncArtifact,
-  deploymentType: DeploymentType,
-  constructorArguments?: any[],
-  options?: DeployContractOptions,
-  overrides?: ethers.Overrides,
-  additionalFactoryDeps?: ethers.BytesLike[]
-) => {
-  const log = (message: string) => {
-    if (!options?.silent) console.log(message);
-  };
-
-  log(`\nStarting deployment process of "${artifact.contractName}"...`);
-
-  const wallet = options?.wallet ?? getWallet();
-  const deployer = new Deployer(hre, wallet);
 
   // Estimate contract deployment fee
   const deploymentFee = await deployer.estimateDeployFee(
