@@ -16,10 +16,6 @@ import {IContractDeployer} from "../interfaces/IContractDeployer.sol";
  *         related to getting or deriving various values.
  */
 contract GettersAndDerivers is ConsiderationBase {
-    // Set the contract deployer as an immutable for deriving conduit address.
-    IContractDeployer immutable contractDeployer =
-        IContractDeployer(0x0000000000000000000000000000000000008006);
-
     /**
      * @dev Derive and set hashes, reference chainId, and associated domain
      *      separator during deployment.
@@ -253,13 +249,18 @@ contract GettersAndDerivers is ConsiderationBase {
     function _deriveConduit(
         bytes32 conduitKey
     ) internal view returns (address conduit) {
-        // Derive address from deployer, conduit key and runtime code hash.
-        conduit = contractDeployer.getNewAddressCreate2(
-            address(this),
-            0x01000173c84b585f036dfe80bfefe59f60cfb3b185f58bc0069e83f98d2fa90a,
-            conduitKey,
-            ""
+        // Derive the conduit address
+        bytes32 hash = keccak256(
+            bytes.concat(
+                keccak256("zksyncCreate2"),
+                bytes32(uint256(uint160(address(_CONDUIT_CONTROLLER)))),
+                conduitKey,
+                0x01000173c84b585f036dfe80bfefe59f60cfb3b185f58bc0069e83f98d2fa90a,
+                keccak256("")
+            )
         );
+
+        conduit = address(uint160(uint256(hash)));
     }
 
     /**

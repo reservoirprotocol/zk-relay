@@ -24,10 +24,6 @@ contract ConduitController is ConduitControllerInterface {
     bytes32 internal immutable _CONDUIT_CREATION_CODE_HASH;
     bytes32 internal immutable _CONDUIT_RUNTIME_CODE_HASH;
 
-    // Set the contract deployer as an immutable for deriving conduit address.
-    IContractDeployer immutable contractDeployer =
-        IContractDeployer(0x0000000000000000000000000000000000008006);
-
     /**
      * @dev Initialize contract by deploying a conduit and setting the creation
      *      code and runtime code hashes as immutable arguments.
@@ -73,12 +69,17 @@ contract ConduitController is ConduitControllerInterface {
         }
 
         // Derive address from deployer, conduit key and runtime code hash.
-        address predictedConduitAddress = contractDeployer.getNewAddressCreate2(
-            address(this),
-            _CONDUIT_RUNTIME_CODE_HASH,
-            conduitKey,
-            ""
+        bytes32 hash = keccak256(
+            bytes.concat(
+                keccak256("zksyncCreate2"),
+                bytes32(uint256(uint160(address(this)))),
+                conduitKey,
+                _CONDUIT_RUNTIME_CODE_HASH,
+                keccak256("")
+            )
         );
+
+        address predictedConduitAddress = address(uint160(uint256(hash)));
 
         // If derived conduit exists, as evidenced by comparing runtime code...
         if (predictedConduitAddress.codehash == _CONDUIT_RUNTIME_CODE_HASH) {
@@ -331,12 +332,17 @@ contract ConduitController is ConduitControllerInterface {
         bytes32 conduitKey
     ) external view override returns (address conduit, bool exists) {
         // Derive address from deployer, conduit key and runtime code hash.
-        conduit = contractDeployer.getNewAddressCreate2(
-            address(this),
-            _CONDUIT_RUNTIME_CODE_HASH,
-            conduitKey,
-            ""
+        bytes32 hash = keccak256(
+            bytes.concat(
+                keccak256("zksyncCreate2"),
+                bytes32(uint256(uint160(address(this)))),
+                conduitKey,
+                _CONDUIT_RUNTIME_CODE_HASH,
+                keccak256("")
+            )
         );
+
+        conduit = address(uint160(uint256(hash)));
 
         // Determine whether conduit exists by retrieving its runtime code.
         exists = (conduit.codehash == _CONDUIT_RUNTIME_CODE_HASH);
