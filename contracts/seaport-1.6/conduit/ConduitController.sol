@@ -7,8 +7,6 @@ import {ConduitInterface} from "../interfaces/ConduitInterface.sol";
 
 import {Conduit} from "./Conduit.sol";
 
-import {IContractDeployer} from "../interfaces/IContractDeployer.sol";
-
 /**
  * @title ConduitController
  * @author 0age

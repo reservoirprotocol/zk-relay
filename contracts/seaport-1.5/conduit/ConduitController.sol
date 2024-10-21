@@ -7,8 +7,6 @@ import {ConduitInterface} from "../interfaces/ConduitInterface.sol";
 
 import {Conduit} from "./Conduit.sol";
 
-import {IContractDeployer} from "../interfaces/IContractDeployer.sol";
-
 /**
  * @title ConduitController
  * @author 0age
@@ -23,10 +21,6 @@ contract ConduitController is ConduitControllerInterface {
     // Set conduit creation code and runtime code hashes as immutable arguments.
     bytes32 internal immutable _CONDUIT_CREATION_CODE_HASH;
     bytes32 internal immutable _CONDUIT_RUNTIME_CODE_HASH;
-
-    // Set the contract deployer as an immutable for deriving conduit address.
-    IContractDeployer immutable contractDeployer =
-        IContractDeployer(0x0000000000000000000000000000000000008006);
 
     /**
      * @dev Initialize contract by deploying a conduit and setting the creation
