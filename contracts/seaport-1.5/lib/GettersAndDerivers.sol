@@ -253,7 +253,9 @@ contract GettersAndDerivers is ConsiderationBase {
                 keccak256("zksyncCreate2"),
                 bytes32(uint256(uint160(address(_CONDUIT_CONTROLLER)))),
                 conduitKey,
-                0x01000173c84b585f036dfe80bfefe59f60cfb3b185f58bc0069e83f98d2fa90a,
+                bytes32(
+                    0x01000173c84b585f036dfe80bfefe59f60cfb3b185f58bc0069e83f98d2fa90a
+                ),
                 keccak256("")
             )
         );
