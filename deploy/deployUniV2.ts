@@ -15,8 +15,12 @@ const deployUniV2 = async () => {
     {}, // options (empty object if no options are needed)
     {
       customData: {
-      salt: salt
-    }}
-  );
+        salt: salt
+      }
+    }
+  ).catch((error) => {
+    console.error(JSON.stringify(error));
+    process.exit(1);
+  });
 }
 
