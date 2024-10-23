@@ -25,6 +25,10 @@ const config: HardhatUserConfig = {
       ethNetwork: 'sepolia',
       verifyURL: 'https://zerion-testnet-proofs.explorer.caldera.xyz/contract_verification'
     },
+    zeroMainnet: {
+      url: 'https://zero-network.calderachain.xyz/http',
+      zksync: true
+    },
     dockerizedNode: {
       url: "http://localhost:3050",
       ethNetwork: "http://localhost:8545",
