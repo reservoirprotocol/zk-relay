@@ -27,6 +27,7 @@ const config: HardhatUserConfig = {
     },
     zeroMainnet: {
       url: 'https://zero-network.calderachain.xyz/http',
+      ethNetwork: 'mainnet',
       zksync: true
     },
     dockerizedNode: {
