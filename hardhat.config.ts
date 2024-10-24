@@ -28,7 +28,8 @@ const config: HardhatUserConfig = {
     zeroMainnet: {
       url: 'https://zero-network.calderachain.xyz/http',
       ethNetwork: 'mainnet',
-      zksync: true
+      zksync: true,
+      verifyURL: 'https://zero-network.calderaexplorer.xyz/contract-verification'
     },
     dockerizedNode: {
       url: "http://localhost:3050",
