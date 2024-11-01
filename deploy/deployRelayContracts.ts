@@ -1,16 +1,19 @@
 import { deployContract } from "./utils";
 import { DeploymentType } from "zksync-ethers/build/types";
 
-const salt = "0x0000000000000000000000000000000000000000000000000000000000000000";
+const salt = "0x0000000000000000000000000000000000000000000000000000000000000001";
 
-const PERMIT2 = "0x7d174F25ADcd4157EcB5B3448fEC909AeCB70033"
+const PERMIT2 = "0x6b4420f66De496D18A6c36367cf7f1440fd9289f"
 const SOLVER = "0xf70da97812CB96acDF810712Aa562db8dfA3dbEF"
+const TESTNET_SOLVER = "0x3e34b27a9bf37D8424e1a58aC7fc4D06914B76B9"
+const ROUTER = '0xaC4EdF9f8cdE86b811e3aa821055c0E8D680cDa8'
 
 export default async function () {
   const multicallerAddress = await deployMulticaller();
   const routerAddress = await deployErc20Router(multicallerAddress);
-  await deployApprovalProxy(routerAddress);
-  await deployRelayReceiver();
+  await deployApprovalProxy(ROUTER);
+  await deployOnlyOwnerMulticaller();
+  await deployRelayReceiver(SOLVER);
 }
 
 const deployMulticaller = async () => {
@@ -31,6 +34,23 @@ const deployMulticaller = async () => {
   return multicallerAddress;
 }
 
+const deployOnlyOwnerMulticaller = async () => {
+  const onlyOwnerMulticaller = await deployContract(
+    "OnlyOwnerMulticaller",
+    "create2" as DeploymentType,
+    [SOLVER], // constructorArguments (empty array if there are no constructor arguments)
+    {}, // options (empty object if no options are needed)
+    {
+      customData: {
+        salt: salt
+      }
+    }
+  ).catch((error) => {
+    console.error(JSON.stringify(error));
+    process.exit(1);
+  });
+}
+
 const deployApprovalProxy = async (erc20Router: string) => {
   const approvalProxy = await deployContract(
     "ApprovalProxy",
@@ -42,7 +62,10 @@ const deployApprovalProxy = async (erc20Router: string) => {
         salt: salt
       }
     }
-  );
+  ).catch((error) => {
+    console.error(JSON.stringify(error));
+    process.exit(1);
+  });
 
   const approvalProxyAddress = await approvalProxy.getAddress();
 
@@ -61,7 +84,7 @@ const deployErc20Router = async (multicallerAddress: string) => {
       }
     }
   ).catch((error) => {
-    console.error(JSON.stringify(error.info._error.error));
+    console.error(JSON.stringify(error));
     process.exit(1);
   });
 
@@ -70,18 +93,21 @@ const deployErc20Router = async (multicallerAddress: string) => {
   return erc20RouterAddress;
 }
 
-const deployRelayReceiver = async () => {
+const deployRelayReceiver = async (solver: string) => {
   const relayReceiver = await deployContract(
     "RelayReceiver",
     "create2" as DeploymentType,
-    [SOLVER], // constructorArguments (empty array if there are no constructor arguments)
+    [solver], // constructorArguments (empty array if there are no constructor arguments)
     {}, // options (empty object if no options are needed)
     {
       customData: {
         salt: salt
       }
     }
-  );
+  ).catch((error) => {
+    console.error(JSON.stringify(error));
+    process.exit(1);
+  });
 
   const relayReceiverAddress = await relayReceiver.getAddress();
 
