@@ -5,10 +5,10 @@ import { deployContract, getWallet } from './utils'
 export default async function () {
   const unsupportedContract = await deployUnsupported();
   const unsupportedAddress = await unsupportedContract.getAddress();
-  await deployUniversalRouter(unsupportedAddress, 'deploy/routerParams/abstract_testnet.json', true);
+  await deployUniversalRouter(unsupportedAddress, 'deploy/routerParams/zero_mainnet.json', true);
 }
 
-const deployUnsupported = async () =>{
+const deployUnsupported = async () => {
   const unsupportedContract = await deployContract(
     "UnsupportedProtocol",
     "create",
@@ -60,8 +60,9 @@ const deployUniversalRouter = async (unsupported: string, pathToParams: string, 
     {},
     {
       customData: {
-      salt: salt
-    }}
+        salt: salt
+      }
+    }
   )
 }
 

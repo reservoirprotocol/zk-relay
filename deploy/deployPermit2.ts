@@ -1,7 +1,7 @@
 import { deployContract } from "./utils";
 import { DeploymentType } from "zksync-ethers/build/types";
 
-const salt = "0x0000000000000000000000000000000000000000000000000000000000000000";
+const salt = "0x0000000000000000000000000000000000000000000000000000000000000001";
 
 export default async function () {
   await deployPermit2();
@@ -15,8 +15,9 @@ const deployPermit2 = async () => {
     {}, // options (empty object if no options are needed)
     {
       customData: {
-      salt: salt
-    }}
+        salt: salt
+      }
+    }
   );
 }
 
