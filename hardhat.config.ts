@@ -13,6 +13,12 @@ const config: HardhatUserConfig = {
       verifyURL:
         "https://api-explorer-verify.testnet.abs.xyz/contract_verification",
     },
+    abstractMainnet: {
+      url: "https://api.raas.matterhosted.dev/",
+      zksync: true,
+      ethNetwork: "mainnet",
+      verifyURL: "https://api-explorer-verify.raas.matterhosted.dev/contract_verification"
+    },
     zkSyncMainnet: {
       url: 'https://mainnet.era.zksync.io',
       ethNetwork: `https://convincing-prettiest-frost.zksync-mainnet.quiknode.pro/a14018fec401cbe6626d8a200375555d21a5503e/`,
