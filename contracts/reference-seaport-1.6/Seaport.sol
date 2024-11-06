@@ -1,30 +1,18 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.13;
 
-import {
-    ConsiderationInterface
-} from "seaport-types/src/interfaces/ConsiderationInterface.sol";
+import {ConsiderationInterface} from "seaport-types/src/interfaces/ConsiderationInterface.sol";
 
-import { OrderType } from "seaport-types/src/lib/ConsiderationEnums.sol";
+import {OrderType} from "seaport-types/src/lib/ConsiderationEnums.sol";
 
-import {
-    AdvancedOrder,
-    BasicOrderParameters,
-    CriteriaResolver,
-    Execution,
-    Fulfillment,
-    FulfillmentComponent,
-    Order,
-    OrderComponents,
-    OrderParameters
-} from "seaport-types/src/lib/ConsiderationStructs.sol";
+import {AdvancedOrder, BasicOrderParameters, CriteriaResolver, Execution, Fulfillment, FulfillmentComponent, Order, OrderComponents, OrderParameters} from "seaport-types/src/lib/ConsiderationStructs.sol";
 
-import { ReferenceOrderCombiner } from "./lib/ReferenceOrderCombiner.sol";
+import {ReferenceOrderCombiner} from "./lib/ReferenceOrderCombiner.sol";
 
-import { OrderToExecute } from "./lib/ReferenceConsiderationStructs.sol";
+import {OrderToExecute} from "./lib/ReferenceConsiderationStructs.sol";
 
 /**
- * @title ReferenceConsideration
+ * @title Seaport
  * @author 0age
  * @custom:coauthor d1ll0n
  * @custom:coauthor transmissions11
@@ -39,10 +27,7 @@ import { OrderToExecute } from "./lib/ReferenceConsiderationStructs.sol";
  *         spent (the "offer") along with an arbitrary number of items that must
  *         be received back by the indicated recipients (the "consideration").
  */
-contract ReferenceConsideration is
-    ConsiderationInterface,
-    ReferenceOrderCombiner
-{
+contract Seaport is ConsiderationInterface, ReferenceOrderCombiner {
     /**
      * @notice Derive and set hashes, reference chainId, and associated domain
      *         separator during deployment.

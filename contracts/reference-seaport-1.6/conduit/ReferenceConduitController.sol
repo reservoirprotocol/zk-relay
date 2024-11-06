@@ -56,7 +56,7 @@ contract ReferenceConduitController is ConduitControllerInterface {
     function createConduit(
         bytes32 conduitKey,
         address initialOwner
-    ) external override returns (address conduitAddress) {
+    ) external override returns (address conduit) {
         // Ensure that an initial owner has been supplied.
         if (initialOwner == address(0)) {
             revert InvalidInitialOwner();
@@ -84,14 +84,11 @@ contract ReferenceConduitController is ConduitControllerInterface {
         // If derived conduit exists, as evidenced by comparing runtime code...
         if (predictedConduitAddress.codehash == _CONDUIT_RUNTIME_CODE_HASH) {
             // Revert with an error indicating that the conduit already exists.
-            revert ConduitAlreadyExists(conduit);
+            revert ConduitAlreadyExists(predictedConduitAddress);
         }
 
         // Deploy the conduit via CREATE2 using the conduit key as the salt.
-        RefernceConduit conduit = new ReferenceConduit{salt: conduitKey}();
-
-        // Get the address of the deployed conduit
-        conduitAddress = address(conduit);
+        conduit = address(new ReferenceConduit{salt: conduitKey}());
 
         // Initialize storage variable referencing conduit properties.
         ConduitProperties storage conduitProperties = _conduits[conduit];
@@ -103,10 +100,10 @@ contract ReferenceConduitController is ConduitControllerInterface {
         conduitProperties.key = conduitKey;
 
         // Emit an event indicating that the conduit has been deployed.
-        emit NewConduit(conduitAddress, conduitKey);
+        emit NewConduit(conduit, conduitKey);
 
         // Emit an event indicating that conduit ownership has been assigned.
-        emit OwnershipTransferred(conduitAddress, address(0), initialOwner);
+        emit OwnershipTransferred(conduit, address(0), initialOwner);
     }
 
     /**
