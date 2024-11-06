@@ -10,6 +10,7 @@
     "deployUniversalRouter": "hardhat deploy-zksync --script deployUniversalRouter.ts",
     "deployPermit2": "hardhat deploy-zksync --script deployPermit2.ts",
     "deploySeaport": "hardhat deploy-zksync --script deploySeaport.ts",
+    "deployReferenceSeaport": "hardhat deploy-zksync --script deployReferenceSeaport.ts",
     "deployWeth": "hardhat deploy-zksync --script deployWeth.ts",
     "deployUniV2": "hardhat deploy-zksync --script deployUniV2.ts",
     "deployRelay": "hardhat deploy-zksync --script deployRelayContracts.ts",
