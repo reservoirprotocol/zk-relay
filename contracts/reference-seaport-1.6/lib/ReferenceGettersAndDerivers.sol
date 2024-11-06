@@ -1,13 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.13;
 
-import {
-    ConsiderationItem,
-    OfferItem,
-    OrderParameters
-} from "seaport-types/src/lib/ConsiderationStructs.sol";
+import {ConsiderationItem, OfferItem, OrderParameters} from "seaport-types/src/lib/ConsiderationStructs.sol";
 
-import { ReferenceConsiderationBase } from "./ReferenceConsiderationBase.sol";
+import {ReferenceConsiderationBase} from "./ReferenceConsiderationBase.sol";
 
 /**
  * @title GettersAndDerivers
@@ -171,21 +167,18 @@ contract ReferenceGettersAndDerivers is ReferenceConsiderationBase {
     function _deriveConduit(
         bytes32 conduitKey
     ) internal view returns (address conduit) {
-        // Derive the address of the conduit.
-        conduit = address(
-            uint160(
-                uint256(
-                    keccak256(
-                        abi.encodePacked(
-                            bytes1(0xff),
-                            address(_CONDUIT_CONTROLLER),
-                            conduitKey,
-                            _CONDUIT_CREATION_CODE_HASH
-                        )
-                    )
-                )
+        // Derive the conduit address
+        bytes32 hash = keccak256(
+            bytes.concat(
+                keccak256("zksyncCreate2"),
+                bytes32(uint256(uint160(address(_CONDUIT_CONTROLLER)))),
+                conduitKey,
+                _CONDUIT_RUNTIME_CODE_HASH,
+                keccak256("")
             )
         );
+
+        conduit = address(uint160(uint256(hash)));
     }
 
     /**
