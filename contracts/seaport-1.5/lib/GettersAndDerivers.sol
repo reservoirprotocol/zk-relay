@@ -248,13 +248,15 @@ contract GettersAndDerivers is ConsiderationBase {
         bytes32 conduitKey
     ) internal view returns (address conduit) {
         // Derive the conduit address
+        // Note: this is the runtime codehash of the ReferenceConduit
+        // compiled with zkSolc v1.5.3
         bytes32 hash = keccak256(
             bytes.concat(
                 keccak256("zksyncCreate2"),
                 bytes32(uint256(uint160(address(_CONDUIT_CONTROLLER)))),
                 conduitKey,
                 bytes32(
-                    0x01000173c84b585f036dfe80bfefe59f60cfb3b185f58bc0069e83f98d2fa90a
+                    0x010001a799febe18e7c003c281bb49671a53ddfbd358b272cd6fb7e012ab42a9
                 ),
                 keccak256("")
             )

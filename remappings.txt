@@ -10,3 +10,4 @@ solmate/=lib/solmate
 seaport-core/=lib/seaport-core
 seaport-sol/=lib/seaport-sol
 @openzeppelin-contracts-v3.1.0/=lib/@openzeppelin-contracts-v3.1.0/contracts
+seaport-types/=lib/seaport-types

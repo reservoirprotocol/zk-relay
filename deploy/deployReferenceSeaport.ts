@@ -2,7 +2,7 @@ import { deployContract } from "./utils";
 import { DeploymentType } from "zksync-ethers/build/types";
 
 const salt = "0x0000000000000000000000000000000000000000000000000000000000000000";
-const CONDUIT_CONTROLLER_ADDRESS = "0xee8810654aDd44297Cb0508288F6C2050890FC81"
+const CONDUIT_CONTROLLER_ADDRESS = "0x1972ddFa941670A9F5fa2A0094f4490347B99D7B"
 
 export default async function () {
   await deploySeaportContracts();
@@ -13,7 +13,7 @@ const deploySeaportContracts = async () => {
   // Else update CONDUIT_CONTROLLER_ADDRESS with the deployed ConduitController address
 
   // const conduitController = await deployContract(
-  //   "contracts/seaport-1.5/conduit/ConduitController.sol:ConduitController",
+  //   "contracts/reference-seaport-1.6/conduit/ReferenceConduitController.sol:ReferenceConduitController",
   //   "create2" as DeploymentType,
   //   [], // constructorArguments (empty array if there are no constructor arguments)
   //   {}, // options (empty object if no options are needed)
@@ -52,7 +52,7 @@ const deploySeaportContracts = async () => {
 
 
   const seaportV1_6 = await deployContract(
-    "contracts/seaport-1.6/Seaport.sol:Seaport",
+    "contracts/reference-seaport-1.6/Seaport.sol:Seaport",
     "create2" as DeploymentType,
     [CONDUIT_CONTROLLER_ADDRESS], // constructorArguments (empty array if there are no constructor arguments)
     {}, // options (empty object if no options are needed)
