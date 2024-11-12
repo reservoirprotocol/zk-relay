@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.13;
 
-import {ConduitControllerInterface} from "seaport-types/src/interfaces/ConduitControllerInterface.sol";
+import {ConduitControllerInterface} from "../../seaport-1.5/interfaces/ConduitControllerInterface.sol";
 
-import {ConsiderationEventsAndErrors} from "seaport-types/src/interfaces/ConsiderationEventsAndErrors.sol";
+import {ConsiderationEventsAndErrors} from "../../seaport-1.5/interfaces/ConsiderationEventsAndErrors.sol";
 
-import {ReentrancyErrors} from "seaport-types/src/interfaces/ReentrancyErrors.sol";
+import {ReentrancyErrors} from "../../seaport-1.5/interfaces/ReentrancyErrors.sol";
 
 /**
  * @title ConsiderationBase
@@ -19,7 +19,7 @@ contract ReferenceConsiderationBase is
 {
     // Declare constants for name, version, and reentrancy sentinel values.
     string internal constant _NAME = "Seaport";
-    string internal constant _VERSION = "1.6";
+    string internal constant _VERSION = "1.5";
     uint256 internal constant _NOT_ENTERED = 1;
     uint256 internal constant _ENTERED = 2;
 
@@ -37,7 +37,7 @@ contract ReferenceConsiderationBase is
     // Allow for interaction with the conduit controller.
     ConduitControllerInterface internal immutable _CONDUIT_CONTROLLER;
 
-    // Cache the conduit code hashes used by the conduit controller.
+    // Cache the conduit creation code hash used by the conduit controller.
     bytes32 internal immutable _CONDUIT_CREATION_CODE_HASH;
     bytes32 internal immutable _CONDUIT_RUNTIME_CODE_HASH;
 

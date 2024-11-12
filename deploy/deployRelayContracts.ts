@@ -14,6 +14,7 @@ export default async function () {
   await deployApprovalProxy(ROUTER);
   await deployOnlyOwnerMulticaller();
   await deployRelayReceiver(SOLVER);
+  await deployMulticall3();
 }
 
 const deployMulticaller = async () => {
@@ -114,3 +115,20 @@ const deployRelayReceiver = async (solver: string) => {
   return relayReceiverAddress;
 }
 
+const deployMulticall3 = async () => {
+  const multicall3 = await deployContract(
+    "Multicall3",
+    "create2" as DeploymentType,
+    [], // constructorArguments (empty array if there are no constructor arguments)
+    {}, // options (empty object if no options are needed)
+    {
+      customData: {
+        salt: salt
+      }
+    }
+  );
+
+  const multicall3Address = await multicall3.getAddress();
+
+  return multicall3Address;
+}
