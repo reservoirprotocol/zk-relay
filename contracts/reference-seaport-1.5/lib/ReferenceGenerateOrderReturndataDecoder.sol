@@ -1,10 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.13;
 
-import {
-    ReceivedItem,
-    SpentItem
-} from "../../contracts/lib/ConsiderationStructs.sol";
+import {ReceivedItem, SpentItem} from "../../seaport-1.5/lib/ConsiderationStructs.sol";
 
 contract ReferenceGenerateOrderReturndataDecoder {
     function decode(

@@ -3,9 +3,9 @@ pragma solidity ^0.8.13;
 
 import {ReferenceConduit} from "./ReferenceConduit.sol";
 
-import {ConduitControllerInterface} from "../interfaces/ConduitControllerInterface.sol";
+import {ConduitControllerInterface} from "../../seaport-1.5/interfaces/ConduitControllerInterface.sol";
 
-import {ConduitInterface} from "../interfaces/ConduitInterface.sol";
+import {ConduitInterface} from "../../seaport-1.5/interfaces/ConduitInterface.sol";
 
 /**
  * @title ConduitController
@@ -36,7 +36,7 @@ contract ReferenceConduitController is ConduitControllerInterface {
         // }();
 
         // Retrieve the conduit runtime code hash and set it as an immutable.
-        _CONDUIT_RUNTIME_CODE_HASH = bytes32(0);
+        _CONDUIT_RUNTIME_CODE_HASH = 0x010001a78e9ceb57b741aa7bbeb28fee020fe4b412cf9c3f753ff67fb24a9d47;
     }
 
     /**

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.13;
 
-import {ConsiderationInterface} from "./interfaces/ConsiderationInterface.sol";
+import {ConsiderationInterface} from "../seaport-1.5/interfaces/ConsiderationInterface.sol";
 
 import {OrderType} from "../seaport-1.5/lib/ConsiderationEnums.sol";
 

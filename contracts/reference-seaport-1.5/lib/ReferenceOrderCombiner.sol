@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.13;
 
-import {ItemType, OrderType, Side} from "../../contracts/lib/ConsiderationEnums.sol";
+import {ItemType, OrderType, Side} from "../../seaport-1.5/lib/ConsiderationEnums.sol";
 
-import {AdvancedOrder, ConsiderationItem, CriteriaResolver, Execution, Fulfillment, FulfillmentComponent, OfferItem, OrderParameters, ReceivedItem, SpentItem} from "../../contracts/lib/ConsiderationStructs.sol";
+import {AdvancedOrder, ConsiderationItem, CriteriaResolver, Execution, Fulfillment, FulfillmentComponent, OfferItem, OrderParameters, ReceivedItem, SpentItem} from "../../seaport-1.5/lib/ConsiderationStructs.sol";
 
 import {AccumulatorStruct, OrderToExecute} from "./ReferenceConsiderationStructs.sol";
 

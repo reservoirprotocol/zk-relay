@@ -1,29 +1,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.13;
 
-import {
-    BasicOrderRouteType,
-    BasicOrderType,
-    ItemType,
-    OrderType
-} from "../../contracts/lib/ConsiderationEnums.sol";
+import {BasicOrderRouteType, BasicOrderType, ItemType, OrderType} from "../../seaport-1.5/lib/ConsiderationEnums.sol";
 
-import {
-    AdditionalRecipient,
-    BasicOrderParameters,
-    ConsiderationItem,
-    OfferItem,
-    ReceivedItem,
-    SpentItem
-} from "../../contracts/lib/ConsiderationStructs.sol";
+import {AdditionalRecipient, BasicOrderParameters, ConsiderationItem, OfferItem, ReceivedItem, SpentItem} from "../../seaport-1.5/lib/ConsiderationStructs.sol";
 
-import {
-    AccumulatorStruct,
-    BasicFulfillmentHashes,
-    FulfillmentItemTypes
-} from "./ReferenceConsiderationStructs.sol";
+import {AccumulatorStruct, BasicFulfillmentHashes, FulfillmentItemTypes} from "./ReferenceConsiderationStructs.sol";
 
-import { ReferenceOrderValidator } from "./ReferenceOrderValidator.sol";
+import {ReferenceOrderValidator} from "./ReferenceOrderValidator.sol";
 
 /**
  * @title BasicOrderFulfiller

@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.13;
 
-import {ConduitControllerInterface} from "../interfaces/ConduitControllerInterface.sol";
+import {ConduitControllerInterface} from "../../seaport-1.5/interfaces/ConduitControllerInterface.sol";
 
-import {ConsiderationEventsAndErrors} from "../interfaces/ConsiderationEventsAndErrors.sol";
+import {ConsiderationEventsAndErrors} from "../../seaport-1.5/interfaces/ConsiderationEventsAndErrors.sol";
 
-import {ReentrancyErrors} from "../interfaces/ReentrancyErrors.sol";
+import {ReentrancyErrors} from "../../seaport-1.5/interfaces/ReentrancyErrors.sol";
 
 /**
  * @title ConsiderationBase
@@ -39,6 +39,7 @@ contract ReferenceConsiderationBase is
 
     // Cache the conduit creation code hash used by the conduit controller.
     bytes32 internal immutable _CONDUIT_CREATION_CODE_HASH;
+    bytes32 internal immutable _CONDUIT_RUNTIME_CODE_HASH;
 
     // Map bulk order tree height to its respective EIP-712 typehash.
     mapping(uint256 => bytes32) internal _bulkOrderTypehashes;
@@ -77,7 +78,7 @@ contract ReferenceConsiderationBase is
         _CONDUIT_CONTROLLER = tempController;
 
         // Retrieve the conduit creation code hash from the supplied controller.
-        (_CONDUIT_CREATION_CODE_HASH, ) = (
+        (_CONDUIT_CREATION_CODE_HASH, _CONDUIT_RUNTIME_CODE_HASH) = (
             tempController.getConduitCodeHashes()
         );
 

@@ -1,35 +1,17 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.13;
 
-import {
-    ItemType,
-    OrderType
-} from "../../contracts/lib/ConsiderationEnums.sol";
+import {ItemType, OrderType} from "../../seaport-1.5/lib/ConsiderationEnums.sol";
 
-import {
-    AdvancedOrder,
-    ConsiderationItem,
-    CriteriaResolver,
-    OfferItem,
-    Order,
-    OrderParameters,
-    ReceivedItem,
-    SpentItem
-} from "../../contracts/lib/ConsiderationStructs.sol";
+import {AdvancedOrder, ConsiderationItem, CriteriaResolver, OfferItem, Order, OrderParameters, ReceivedItem, SpentItem} from "../../seaport-1.5/lib/ConsiderationStructs.sol";
 
-import {
-    AccumulatorStruct,
-    FractionData,
-    OrderToExecute
-} from "./ReferenceConsiderationStructs.sol";
+import {AccumulatorStruct, FractionData, OrderToExecute} from "./ReferenceConsiderationStructs.sol";
 
-import {
-    ReferenceBasicOrderFulfiller
-} from "./ReferenceBasicOrderFulfiller.sol";
+import {ReferenceBasicOrderFulfiller} from "./ReferenceBasicOrderFulfiller.sol";
 
-import { ReferenceCriteriaResolution } from "./ReferenceCriteriaResolution.sol";
+import {ReferenceCriteriaResolution} from "./ReferenceCriteriaResolution.sol";
 
-import { ReferenceAmountDeriver } from "./ReferenceAmountDeriver.sol";
+import {ReferenceAmountDeriver} from "./ReferenceAmountDeriver.sol";
 
 /**
  * @title OrderFulfiller

@@ -5,7 +5,7 @@ import {ConsiderationEventsAndErrors} from "../../seaport-1.5/interfaces/Conside
 
 import {ReentrancyErrors} from "../../seaport-1.5/interfaces/ReentrancyErrors.sol";
 
-import {_ENTERED_AND_ACCEPTING_NATIVE_TOKENS, _ENTERED, _NOT_ENTERED} from "../../contracts/lib/ConsiderationConstants.sol";
+import {_ENTERED_AND_ACCEPTING_NATIVE_TOKENS, _ENTERED, _NOT_ENTERED} from "../../seaport-1.5/lib/ConsiderationConstants.sol";
 
 /**
  * @title ReentrancyGuard

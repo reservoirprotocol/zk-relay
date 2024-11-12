@@ -5,9 +5,9 @@ import {ZoneInterface} from "../../seaport-1.5/interfaces/ZoneInterface.sol";
 
 import {ContractOffererInterface} from "../../seaport-1.5/interfaces/ContractOffererInterface.sol";
 
-import {ItemType, OrderType} from "../../contracts/lib/ConsiderationEnums.sol";
+import {ItemType, OrderType} from "../../seaport-1.5/lib/ConsiderationEnums.sol";
 
-import {AdditionalRecipient, AdvancedOrder, BasicOrderParameters, ReceivedItem, SpentItem, ZoneParameters} from "../../contracts/lib/ConsiderationStructs.sol";
+import {AdditionalRecipient, AdvancedOrder, BasicOrderParameters, ReceivedItem, SpentItem, ZoneParameters} from "../../seaport-1.5/lib/ConsiderationStructs.sol";
 
 import {OrderToExecute} from "./ReferenceConsiderationStructs.sol";
 

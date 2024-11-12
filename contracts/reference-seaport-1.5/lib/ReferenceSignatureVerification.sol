@@ -5,7 +5,7 @@ import {EIP1271Interface} from "../../seaport-1.5/interfaces/EIP1271Interface.so
 
 import {SignatureVerificationErrors} from "../../seaport-1.5/interfaces/SignatureVerificationErrors.sol";
 
-import {EIP2098_allButHighestBitMask} from "../../contracts/lib/ConsiderationConstants.sol";
+import {EIP2098_allButHighestBitMask} from "../../seaport-1.5/lib/ConsiderationConstants.sol";
 
 /**
  * @title SignatureVerification
