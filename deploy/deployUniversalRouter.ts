@@ -1,11 +1,10 @@
-import { Deployer } from '@matterlabs/hardhat-zksync-deploy'
 import * as fs from 'fs'
 import { deployContract, getWallet } from './utils'
 
 export default async function () {
   const unsupportedContract = await deployUnsupported();
   const unsupportedAddress = await unsupportedContract.getAddress();
-  await deployUniversalRouter(unsupportedAddress, 'deploy/routerParams/zero_mainnet.json', true);
+  await deployUniversalRouter(unsupportedAddress, 'deploy/routerParams/zero_mainnet.json');
 }
 
 const deployUnsupported = async () => {
@@ -19,13 +18,8 @@ const deployUnsupported = async () => {
   return unsupportedContract;
 }
 
-const deployUniversalRouter = async (unsupported: string, pathToParams: string, verify: boolean) => {
+const deployUniversalRouter = async (unsupported: string, pathToParams: string) => {
   console.log(`Running deploy script for the UniversalRouter contract`)
-
-  const wallet = getWallet();
-
-  const hre = require('hardhat')
-  const deployer = new Deployer(hre, wallet)
 
   let params: any = fetchParameters(pathToParams)
   params = {
