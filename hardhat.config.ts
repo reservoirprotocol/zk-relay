@@ -29,13 +29,19 @@ const config: HardhatUserConfig = {
       url: 'https://zerion-testnet-proofs.rpc.caldera.xyz/http',
       zksync: true,
       ethNetwork: 'sepolia',
-      verifyURL: 'https://zerion-testnet-proofs.explorer.caldera.xyz/contract_verification'
+      verifyURL: 'https://zerion-testnet-proofs.explorer.caldera.xyz/verification/contract_verification'
     },
     zeroMainnet: {
       url: 'https://zero-network.calderachain.xyz/http',
       ethNetwork: 'mainnet',
       zksync: true,
       verifyURL: 'https://zero-network.calderaexplorer.xyz/verification/contract_verification'
+    },
+    creatorTestnet: {
+      url: 'https://creator-testnet.rpc.caldera.xyz/http',
+      ethNetwork: 'sepolia',
+      zksync: true,
+      verifyURL: 'https://creator-testnet.explorer.caldera.xyz/verification/contract_verification'
     },
     dockerizedNode: {
       url: "http://localhost:3050",
@@ -229,6 +235,9 @@ const config: HardhatUserConfig = {
       "contracts/usdc/*": {
         version: "0.6.12"
       },
+      "contracts/relay/Multicall3.sol": {
+        version: "0.8.12"
+      }
     },
   },
 };
