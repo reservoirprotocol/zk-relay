@@ -25,6 +25,12 @@ const config: HardhatUserConfig = {
       zksync: true,
       verifyURL: 'https://zksync2-mainnet-explorer.zksync.io/contract_verification',
     },
+    zkSyncTestnetSepolia: {
+      url: 'https://sepolia.era.zksync.dev',
+      ethNetwork: `https://zksync-sepolia.drpc.org`,
+      zksync: true,
+      verifyURL: 'https://explorer.sepolia.era.zksync.dev/contract_verification',
+    },
     zeroTestnet: {
       url: 'https://zerion-testnet-proofs.rpc.caldera.xyz/http',
       zksync: true,
@@ -41,6 +47,7 @@ const config: HardhatUserConfig = {
       url: 'https://creator-testnet.rpc.caldera.xyz/http',
       ethNetwork: 'sepolia',
       zksync: true,
+      gas: 1000000,
       verifyURL: 'https://creator-testnet.explorer.caldera.xyz/verification/contract_verification'
     },
     dockerizedNode: {
