@@ -1,5 +1,5 @@
 import * as fs from 'fs'
-import { deployContract, getWallet } from './utils'
+import { deployContract } from './utils'
 
 export default async function () {
   const unsupportedContract = await deployUnsupported();
@@ -7,12 +7,19 @@ export default async function () {
   await deployUniversalRouter(unsupportedAddress, 'deploy/routerParams/zero_mainnet.json');
 }
 
+const salt = "0x0000000000000000000000000000000000000000000000000000000000000000";
+
 const deployUnsupported = async () => {
   const unsupportedContract = await deployContract(
     "UnsupportedProtocol",
-    "create",
+    "create2",
     [], // constructorArguments (empty array if there are no constructor arguments)
     {}, // options (empty object if no options are needed)
+    {
+      customData: {
+        salt: salt
+      }
+    }
   );
 
   return unsupportedContract;
@@ -44,9 +51,7 @@ const deployUniversalRouter = async (unsupported: string, pathToParams: string) 
 
   console.log('routerParams: ')
   console.log(params)
-
-  const salt = "0x0000000000000000000000000000000000000000000000000000000000000001";
-
+  g
   await deployContract(
     'UniversalRouter',
     'create2',
