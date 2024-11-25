@@ -47,8 +47,14 @@ const config: HardhatUserConfig = {
       url: 'https://creator-testnet.rpc.caldera.xyz/http',
       ethNetwork: 'sepolia',
       zksync: true,
-      gas: 1000000,
+      gas: 4294967295,
       verifyURL: 'https://creator-testnet.explorer.caldera.xyz/verification/contract_verification'
+    },
+    zkSyncDevnet: {
+      url: 'https://zk-devnet.rpc.caldera.xyz/http',
+      ethNetwork: 'sepolia',
+      zksync: true,
+      gas: 4294967295
     },
     dockerizedNode: {
       url: "http://localhost:3050",
