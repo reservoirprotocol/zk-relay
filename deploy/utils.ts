@@ -1,4 +1,6 @@
 import * as hre from "hardhat";
+import { HardhatRuntimeEnvironment } from 'hardhat/types';
+import * as zk from 'zksync-ethers';
 import { Provider, Wallet } from "zksync-ethers";
 import { Deployer } from "@matterlabs/hardhat-zksync";
 import { ethers } from "ethers";
@@ -7,6 +9,7 @@ import { vars } from "hardhat/config";
 import "@matterlabs/hardhat-zksync-node/dist/type-extensions";
 import "@matterlabs/hardhat-zksync-verify/dist/src/type-extensions";
 import { DeploymentType } from "zksync-ethers/build/types";
+import { ZkSyncArtifact } from "@matterlabs/hardhat-zksync-deploy/dist/types";
 
 const PRIVATE_KEY_HARDHAT_CONFIGURATION_VARIABLE_NAME = "WALLET_PRIVATE_KEY";
 
@@ -209,6 +212,68 @@ export const deployContract = async (
 
   return contract;
 };
+
+export const deployUniV2 = async (
+  hre: HardhatRuntimeEnvironment,
+  uniV2FactoryArtifact: ZkSyncArtifact,
+  uniV2PairArtifact: ZkSyncArtifact,
+  constructorArguments: any[] = [],
+  options?: DeployContractOptions,
+  deploymentType: DeploymentType = 'create2',
+  overrides?: ethers.Overrides,
+) => {
+  const log = (message: string) => {
+    console.log(message);
+  };
+
+  const artifact = uniV2FactoryArtifact;
+  const factoryDeps = [uniV2PairArtifact.bytecode];
+  const wallet = getWallet();
+
+  log(`\nStarting deployment process of "${artifact.contractName}"...`);
+
+  const factory = new zk.ContractFactory<any[], zk.Contract>(
+    artifact.abi,
+    artifact.bytecode,
+    wallet,
+    deploymentType,
+  );
+  const { customData, ..._overrides } = overrides ?? {};
+
+  // Encode and send the deploy transaction providing factory dependencies.
+  const contract = await factory.deploy(...constructorArguments, {
+    ..._overrides,
+    customData: {
+      ...customData,
+      factoryDeps,
+    },
+  });
+  await contract.waitForDeployment();
+
+  const address = await contract.getAddress();
+  const constructorArgs = contract.interface.encodeDeploy(constructorArguments);
+  const fullContractSource = `${artifact.sourceName}:${artifact.contractName}`;
+
+  // Display contract deployment info
+  log(`\n"${artifact.contractName}" was successfully deployed:`);
+  log(` - Contract address: ${address}`);
+  log(` - Contract source: ${fullContractSource}`);
+  log(` - Encoded constructor arguments: ${constructorArgs}\n`);
+
+  if (!options?.noVerify && hre.network.config.verifyURL) {
+    log(`Requesting contract verification...`);
+    await verifyContract({
+      address,
+      contract: `contracts/uni-v2/UniswapV2Factory.sol:UniswapV2Factory`,
+      constructorArguments: constructorArgs,
+      bytecode: artifact.bytecode,
+    });
+  }
+
+  logExplorerUrl(address, "address");
+
+  return contract;
+}
 
 /**
  * Rich wallets can be used for testing purposes.

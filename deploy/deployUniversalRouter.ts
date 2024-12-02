@@ -51,7 +51,6 @@ const deployUniversalRouter = async (unsupported: string, pathToParams: string) 
 
   console.log('routerParams: ')
   console.log(params)
-  g
   await deployContract(
     'UniversalRouter',
     'create2',

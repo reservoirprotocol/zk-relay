@@ -34,3 +34,6 @@
 [submodule "lib/seaport-types"]
 	path = lib/seaport-types
 	url = https://github.com/ProjectOpenSea/seaport-types
+[submodule "lib/@uniswap/v2-core"]
+	path = lib/@uniswap/v2-core
+	url = https://github.com/uniswap-zksync/era-uniswap-v2-core
